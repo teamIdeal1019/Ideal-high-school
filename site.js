@@ -243,7 +243,7 @@
     // --- 모집 상태 ---
     function recruitmentState(p) {
         // 공지 없음
-        if (!p || !p.published || p.archive) {
+        if (!p || p.published === false || p.archive) {
             return {
                 label: '모집 준비 중',
                 open: false
@@ -300,7 +300,7 @@
         const resultDate = admission.resultDate || '';
         const chatUrl = admission.openChatUrl || '';
         const schedule = {start: admission.start || '', end: admission.end || ''};
-        const status = recruitmentState({...schedule, published: Boolean(p?.published), archive: Boolean(p?.archive)});
+        const status = recruitmentState(schedule);
 
         // 날짜가 확정되지 않았을 때는 임의의 날짜를 표시하지 않습니다.
         const resultLabel = /^\d{4}-\d{2}-\d{2}$/.test(resultDate)
@@ -326,7 +326,7 @@
         ];
 
         return section(`
-          ${head('신입생 모집')}
+          ${head('입학 안내')}
 
           <div class="recruitment-panel">
             <div class="recruitment-summary">

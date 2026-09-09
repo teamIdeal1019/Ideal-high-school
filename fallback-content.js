@@ -9,7 +9,7 @@ window.IDEAL_CONTENT = {
     "name": "이상고등학교",
     "team": "팀 이상",
     "slogan": "국내 예술 성장의 중심, 팀 이상입니다.",
-    "intro": "이상고등학교는 창의적 사고와 실천적인 예술적 역량을 기르는 종합예술팀입니다. 팀 이상의 세계관 속에서 우리는 예술을 통해 사회를 변화시키고, 예술을 통해 새로운 가능성을 탐구합니다.",
+    "intro": "팀 이상은 국내 창작문화를 활성화하고 발전시키고자 하는 사람들이 모여, 성장을 최우선가치로 삼아 하나의 꿈을 향해 열심히 협력하고 달려가는 종합예술팀입니다.",
     "wikiUrl": "https://docs.google.com/document/d/1MtoMEaBiY6oxagLoxrlVnCw6KFrMoA4ul-Q90Z6bxdQ/edit",
     "youtubeUrl": "https://www.youtube.com/@team-ideal",
     "previewDrafts": false,
@@ -53,12 +53,12 @@ window.IDEAL_CONTENT = {
     "marppleUrl": "https://marpple.shop/kr/ideal_sen_hs_kr"
   },
   "admission": {
-    "title": "7기 팀원 모집",
-    "resultDate": "",
+    "title": "6기 팀원 모집",
+    "resultDate": "2026-09-13",
     "openChatUrl": "",
     "description": "팀 이상의 새로운 구성원을 기다립니다.",
-    "start": "",
-    "end": "",
+    "start": "2026-08-17",
+    "end": "2026-09-11",
     "guidelinesUrl": "",
     "formUrl": "",
     "status": ""
@@ -74,7 +74,7 @@ window.IDEAL_CONTENT = {
   "values": [
     {
       "title": "지속적인 성장",
-      "text": "결과뿐 아니라 배우고 시도하는 과정을 소중히 여깁니다. 그것이 성장을 지속시킬 것이라 믿습니다."
+      "text": "성장에 한계를 두지 않고 해낼 수 있다는 믿음으로 나아가려 합니다. 그것이 성장을 지속시킬 것이라 믿습니다. 이것이 우리 팀을 이루는 최우선 가치입니다."
     },
     {
       "title": "협업의 시너지",
@@ -717,135 +717,135 @@ window.IDEAL_CONTENT = {
   "workSlots": [
     {
       "id": "slot-1",
-      "title": "작품 등록 공간 01",
+      "title": "赤馬(붉은 말) 캐릭터 디자인 합작",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-2",
-      "title": "작품 등록 공간 02",
+      "title": "지원하기 VS 사약먹기 | 팀 이상 6기 팀원모집",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-3",
-      "title": "작품 등록 공간 03",
+      "title": "[오디오드라마] 넌 세상에서 가장 인간적인 재앙이야. 『멸망 유예 연구소』",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-4",
-      "title": "작품 등록 공간 04",
+      "title": "이상고등학교 스승의 날 대작전!",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-5",
-      "title": "작품 등록 공간 05",
-      "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "title": "자 우리 한 번 미쳐볼까요?",
+      "category": "간식컨",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-6",
-      "title": "작품 등록 공간 06",
-      "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "title": "우당탕탕 이상어린이집",
+      "category": "간식컨",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-7",
-      "title": "작품 등록 공간 07",
+      "title": "돌아온 팀이상의 만우절",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-8",
-      "title": "작품 등록 공간 08",
-      "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "title": "2026년도 1월 크로키 스터디",
+      "category": "스터디",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-9",
-      "title": "작품 등록 공간 09",
+      "title": "팀원들 앞에서 오타쿠발표 하는 팀장",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-10",
-      "title": "작품 등록 공간 10",
-      "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "title": "2025년도 12월 색감 모작 스터디",
+      "category": "스터디",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-11",
-      "title": "작품 등록 공간 11",
+      "title": "팀 이상의 2026년 미리보기",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-12",
-      "title": "작품 등록 공간 12",
+      "title": "청춘만화 커버",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-13",
-      "title": "작품 등록 공간 13",
+      "title": "돌쇠 어서오고 | 팀 이상 5기 팀원모집",
       "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-14",
-      "title": "작품 등록 공간 14",
-      "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "title": "미소녀들과의 발렌타인 이벤트",
+      "category": "간식컨",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-15",
-      "title": "작품 등록 공간 15",
-      "category": "정식컨",
-      "image": "assets/works-placeholder.svg",
+      "title": "2025년도 11월 해부학 스터디",
+      "category": "스터디",
+      "image": "assets/works-thumbnail_slot1.webp",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-16",
-      "title": "작품 등록 공간 16",
-      "category": "정식컨",
+      "title": "2025년도 10월 캐릭터 디자인 스터디",
+      "category": "스터디",
       "image": "assets/works-placeholder.svg",
       "description": "공개할 작품을 준비 중입니다.",
       "sample": true
     },
     {
       "id": "slot-17",
-      "title": "작품 등록 공간 17",
+      "title": "더우면 죽어! 지옥의 운동회 (로그)",
       "category": "정식컨",
       "image": "assets/works-placeholder.svg",
       "description": "공개할 작품을 준비 중입니다.",
@@ -853,7 +853,7 @@ window.IDEAL_CONTENT = {
     },
     {
       "id": "slot-18",
-      "title": "작품 등록 공간 18",
+      "title": "좀비만담",
       "category": "정식컨",
       "image": "assets/works-placeholder.svg",
       "description": "공개할 작품을 준비 중입니다.",
@@ -861,7 +861,7 @@ window.IDEAL_CONTENT = {
     },
     {
       "id": "slot-19",
-      "title": "작품 등록 공간 19",
+      "title": "광복 80주년 기념 스피드페인팅",
       "category": "정식컨",
       "image": "assets/works-placeholder.svg",
       "description": "공개할 작품을 준비 중입니다.",
@@ -1038,8 +1038,8 @@ window.IDEAL_CONTENT = {
   ],
   "hero": {
     "kicker": "팀 이상 · 이상고등학교",
-    "line1": "우리의 날개로,",
-    "line2": "더 넓은 세계를.",
-    "intro": "이상고등학교는 창의적 사고와 실천적인 예술적 역량을 기르는 종합예술팀입니다. 팀 이상의 세계관 속에서 우리는 예술을 통해 사회를 변화시키고, 예술을 통해 새로운 가능성을 탐구합니다."
+    "line1": "우리의 날개는,",
+    "line2": "더 높은 이상을 향한다.",
+    "intro": "팀 이상은 국내 창작문화를 활성화하고 발전시키고자 하는 사람들이 모여, 성장을 최우선가치로 삼아 하나의 꿈을 향해 열심히 협력하고 달려가는 종합예술팀입니다."
   }
 };
