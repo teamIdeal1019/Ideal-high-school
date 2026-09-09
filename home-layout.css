@@ -1,0 +1,423 @@
+@charset "UTF-8";
+
+/* ============================================================
+   HOME · FOUR SCREEN LAYOUT
+   ------------------------------------------------------------
+   Desktop target: 16:9 viewport, e.g. 1920 × 1080 or 1366 × 768.
+   100svh means the visible browser viewport, not a forced 16:9 crop.
+   The header stays visible; subsequent screens use the remaining height.
+   min-height is deliberate: extra posts, zoom or short screens must not
+   hide content or create a nested scrollbar.
+   This stylesheet is loaded only by index.html.
+   ============================================================ */
+
+body[data-page="home"] {
+  --home-header-height: 82px;
+  --home-screen-height: calc(100vh - var(--home-header-height));
+  --home-screen-height: calc(100svh - var(--home-header-height));
+  --home-screen-padding: clamp(34px, 5.5vh, 84px);
+}
+
+/* The actual header height and the screen-height calculation stay in sync. */
+body[data-page="home"] .header-row {
+  height: var(--home-header-height);
+}
+
+body[data-page="home"] #main {
+  min-width: 0;
+}
+
+/* 01 · Header + hero + five connected menu cells, one opening screen. */
+.home-intro-screen {
+  min-height: var(--home-screen-height);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gray-100);
+  background-image: var(--asset-bg-soft);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.home-intro-screen .hero {
+  flex: 1 0 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home-intro-screen .hero-inner {
+  flex: 1 0 auto;
+  width: min(var(--max), calc(100% - 48px));
+  min-height: 0;
+  height: auto;
+  padding-block: clamp(30px, 5vh, 78px);
+}
+
+/* Keep the original connected-panel design and its slight hero overlap. */
+/* The five-cell menu is larger, but the opening screen retains its
+   existing viewport height. The extra area is taken from the hero's
+   flexible space and a slightly deeper overlap, not from a taller page. */
+.home-intro-screen .category-wrap {
+  flex: 0 0 auto;
+  margin-top: -42px;
+  padding-bottom: clamp(12px, 1.6vh, 22px);
+  background: none;
+}
+
+.home-intro-screen .category-wrap > .container {
+  width: min(1320px, calc(100% - 48px));
+}
+
+.home-intro-screen .category-grid {
+  margin: 0;
+}
+
+.home-intro-screen .category-card {
+  min-height: clamp(174px, 20vh, 210px);
+  padding: clamp(22px, 2.6vh, 31px) clamp(22px, 2vw, 30px);
+  gap: clamp(18px, 2.2vh, 25px);
+}
+
+.home-intro-screen .category-card strong {
+  font-size: clamp(23px, 1.7vw, 27px);
+  line-height: 1.35;
+}
+
+.home-intro-screen .category-card small {
+  font-size: clamp(14.5px, 1.05vw, 16px);
+  line-height: 1.5;
+}
+
+/* The second line is visibly, but not dramatically, darker than white. */
+.home-intro-screen .hero h1 em {
+  color: #c3cedd;
+}
+
+/* 02–04 · Each section occupies at least the space below the header. */
+body[data-page="home"] #admission,
+body[data-page="home"] #notices,
+body[data-page="home"] #plaza {
+  scroll-margin-top: var(--home-header-height);
+}
+
+body[data-page="home"] .home-notices-section,
+body[data-page="home"] .plaza {
+  min-height: var(--home-screen-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: var(--home-screen-padding);
+}
+
+/* 02 · Recruitment: return to a content-sized section. */
+body[data-page="home"] #admission > .admission-section {
+  min-height: 0;
+  display: block;
+  padding-block: clamp(64px, 7vh, 96px);
+}
+
+/* 02 · Recruitment. Keep the existing information and three links. */
+body[data-page="home"] .admission-section .section-head {
+  flex: 0 0 auto;
+  margin-bottom: clamp(22px, 3vh, 36px);
+}
+
+body[data-page="home"] .recruitment-panel {
+  gap: clamp(22px, 3.5vw, 48px);
+  padding: clamp(26px, 3.4vh, 42px);
+}
+
+body[data-page="home"] .recruitment-links {
+  margin-top: clamp(14px, 2.2vh, 22px);
+}
+
+/* 03 · The board grows with its posts instead of clipping or paginating. */
+body[data-page="home"] .home-notices-section .section-head {
+  margin-bottom: clamp(22px, 3vh, 42px);
+}
+
+body[data-page="home"] .home-board-table thead th {
+  padding-block: 15px;
+}
+
+body[data-page="home"] .home-board-row th,
+body[data-page="home"] .home-board-row td {
+  padding-block: clamp(15px, 2vh, 22px);
+}
+
+/* 04 · Plaza: full-height composition and three independent image assets. */
+body[data-page="home"] .section.section-navy.plaza {
+  padding-block: var(--home-screen-padding);
+  gap: clamp(18px, 2.8vh, 34px);
+  background-color: #14243a;
+  background-image: url("assets/theme/bg-plaza-section.svg");
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border-top-color: rgba(223, 233, 246, .12);
+}
+
+body[data-page="home"] .plaza-head {
+  margin-bottom: 0;
+}
+
+body[data-page="home"] .plaza .work-viewport {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+body[data-page="home"] .plaza .work-track > .work-card {
+  width: clamp(300px, 25vw, 400px);
+  background-color: #203754;
+  background-image: url("assets/theme/bg-plaza-card.svg");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-color: rgba(227, 238, 252, .16);
+}
+
+body[data-page="home"] .plaza .work-info p {
+  color: #c6d2e1;
+}
+
+body[data-page="home"] .plaza .circle-button {
+  background-color: #294461;
+  background-image: url("assets/theme/bg-plaza-button.svg");
+  background-size: 100% 100%;
+  border-color: rgba(227, 238, 252, .2);
+}
+
+body[data-page="home"] .plaza .plaza-all {
+  background-color: #294461;
+  background-image: url("assets/theme/bg-plaza-button.svg");
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(227, 238, 252, .24);
+  color: #fff;
+}
+
+body[data-page="home"] .plaza .plaza-all:hover,
+body[data-page="home"] .plaza .circle-button:hover {
+  filter: brightness(1.12);
+  border-color: rgba(227, 238, 252, .5);
+}
+
+body[data-page="home"] .plaza-note {
+  margin-top: 0;
+}
+
+/* Keep the total and full-gallery link together at the bottom of the screen. */
+body[data-page="home"] .plaza > .container:last-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+/* A little extra room for real artwork on wide 16:9 displays. */
+@media (min-width: 1600px) and (min-height: 850px) {
+  body[data-page="home"] .plaza .work-track > .work-card {
+    width: min(27vw, 430px);
+  }
+}
+
+/* Tablets: let menus wrap and panels stack without losing content. */
+@media (max-width: 1000px) {
+  .home-intro-screen .category-wrap {
+    margin-top: -27px;
+    padding-bottom: clamp(18px, 2.5vh, 30px);
+  }
+
+  body[data-page="home"] .home-intro-screen .category-card {
+    min-height: 132px;
+  }
+}
+
+/* Mobile and portrait screens are naturally taller than 16:9.
+   We preserve the visual order and minimum screen height, not a forced crop. */
+@media (max-width: 880px) {
+  body[data-page="home"] {
+    --home-header-height: 88px;
+    --home-screen-padding: clamp(48px, 7vh, 76px);
+  }
+
+  .home-intro-screen .hero-inner {
+    padding-block: 58px;
+  }
+
+  .home-intro-screen .category-wrap {
+    margin-top: 0;
+    padding-bottom: 0;
+  }
+
+  .home-intro-screen .category-wrap > .container {
+    width: calc(100% - 32px);
+  }
+
+  body[data-page="home"] .home-intro-screen .category-card {
+    min-height: 132px;
+    padding: clamp(18px, 2.5vh, 28px) 26px;
+    gap: 20px;
+  }
+
+  .home-intro-screen .category-card strong {
+    font-size: 21px;
+  }
+
+  .home-intro-screen .category-card small {
+    font-size: 13px;
+  }
+
+  body[data-page="home"] .recruitment-panel {
+    gap: 25px;
+    padding: 30px;
+  }
+
+  body[data-page="home"] .home-board-row th,
+  body[data-page="home"] .home-board-row td {
+    padding-block: 18px;
+  }
+
+  body[data-page="home"] .plaza .work-track > .work-card {
+    width: min(316px, calc(100vw - 32px));
+  }
+}
+
+@media (max-width: 780px) {
+  body[data-page="home"] .home-intro-screen .category-card {
+    padding-inline: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-intro-screen .hero-inner {
+    width: calc(100% - 32px);
+  }
+
+  body[data-page="home"] .home-intro-screen .category-card {
+    min-height: 132px;
+    padding: 20px 18px;
+    gap: 15px;
+  }
+
+  .home-intro-screen .category-card strong {
+    font-size: 19px;
+  }
+
+  .home-intro-screen .category-card small {
+    font-size: 12px;
+  }
+
+  body[data-page="home"] .plaza > .container:last-child {
+    gap: 14px;
+  }
+}
+
+/* Short desktop windows, browser zoom, or unusually long sheet content:
+   the natural document grows. No fixed height, clipping or nested scrolling. */
+@media (max-height: 650px) and (min-width: 881px) {
+  body[data-page="home"] {
+    --home-screen-padding: 30px;
+  }
+
+  .home-intro-screen .hero-inner {
+    padding-block: 25px;
+  }
+
+  body[data-page="home"] .home-intro-screen .category-card {
+    min-height: 110px;
+    padding-block: 16px;
+  }
+
+  body[data-page="home"] .home-board-row th,
+  body[data-page="home"] .home-board-row td {
+    padding-block: 13px;
+  }
+}
+
+/* ============================================================
+   홈 중앙 정렬 · JavaScript 제어
+   ------------------------------------------------------------
+   proximity 스냅은 목표 위치에 도달하지 않아 사용하지 않습니다.
+   home-scroll.js가 실제 섹션 높이와 전체 뷰포트를 측정합니다.
+   첫 화면 및 모집 섹션의 크기와 배치는 변경하지 않습니다.
+   ============================================================ */
+html:has(body[data-page="home"]) {
+  scroll-snap-type: none;
+}
+
+body[data-page="home"] .home-notices-section,
+body[data-page="home"] .plaza {
+  scroll-snap-align: none;
+  scroll-margin-top: 0;
+  scroll-margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(body[data-page="home"]) {
+    scroll-behavior: auto;
+  }
+}
+
+/* ============================================================
+   홈 메인 일러스트 표시 영역 확대
+   ------------------------------------------------------------
+   - 첫 화면의 전체 높이는 유지합니다.
+   - 일러스트는 더 크게 보여 주되, 윗부분이 덜 잘리도록
+     아래쪽으로 내려서 배치합니다.
+   ============================================================ */
+
+/* Desktop: enlarge the right illustration and move it downward so the
+   upper head/fan area stays visible while preserving the first-screen layout. */
+body[data-page="home"] .home-intro-screen .hero-wings {
+  width: min(1020px, 71vw);
+  right: -48px;
+  bottom: -96px;
+  opacity: .58;
+}
+
+/* Large widescreens can handle a little more presence from the artwork. */
+@media (min-width: 1600px) and (min-height: 850px) {
+  body[data-page="home"] .home-intro-screen .hero-wings {
+    width: min(1100px, 70vw);
+    right: -20px;
+    bottom: -108px;
+  }
+}
+
+/* Standard laptops: keep the artwork clear of the text block and menu. */
+@media (max-width: 1366px) and (min-width: 881px) {
+  body[data-page="home"] .home-intro-screen .hero-wings {
+    width: min(930px, 70vw);
+    right: -88px;
+    bottom: -82px;
+  }
+}
+
+/* Tablet/mobile keep the previous balance. */
+@media (max-width: 880px) {
+  body[data-page="home"] .home-intro-screen .hero-wings {
+    width: min(760px, 96vw);
+    right: -210px;
+    bottom: -8px;
+    opacity: .34;
+  }
+}
+
+/* Release: prevent the five-category menu from widening narrow screens. */
+@media (max-width: 780px) {
+  body[data-page="home"] .home-intro-screen .category-grid {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body[data-page="home"] .home-intro-screen .category-card {
+    min-width: 0;
+    padding-inline: clamp(12px, 3vw, 22px);
+  }
+  body[data-page="home"] .home-intro-screen .category-card strong {
+    font-size: clamp(18px, 5vw, 23px);
+    overflow-wrap: break-word;
+  }
+}

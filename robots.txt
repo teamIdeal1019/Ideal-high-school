@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ideal.sen.hs.io.kr/sitemap.xml
