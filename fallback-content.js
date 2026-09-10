@@ -1,8 +1,7 @@
 /*
  * 이상고등학교 · 홈페이지 기본 콘텐츠
- * 공지사항은 이 파일의 posts 배열에서 관리합니다.
- * 현재 공지사항은 config.js의 noticesSource: "local" 설정으로 고정되어 있습니다.
- * 기존 구글 시트 및 다른 콘텐츠 데이터는 변경하지 않았습니다.
+ * 구글 시트 연결 전/연결 실패 시 표시되는 안전한 기본값입니다.
+ * 실제 운영 콘텐츠는 새 CMS 스프레드시트 + Apps Script에서 관리합니다.
  */
 window.IDEAL_CONTENT = {
   "site": {
@@ -58,10 +57,7 @@ window.IDEAL_CONTENT = {
     "openChatUrl": "",
     "description": "팀 이상의 새로운 구성원을 기다립니다.",
     "start": "2026-08-17",
-    "end": "2026-09-11",
-    "guidelinesUrl": "",
-    "formUrl": "",
-    "status": ""
+    "end": "2026-09-11"
   },
   "leader": {
     "name": "한란",
@@ -85,7 +81,15 @@ window.IDEAL_CONTENT = {
       "text": "한편으로는, 가장 한국적인 것이 곧 가장 세계적인 것입니다. 국내 예술 성장의 중심이 되겠습니다."
     }
   ],
-  "history": [],
+  "history": [
+    {
+      "id": "history-1",
+      "date": "2023-10-19",
+      "text": "팀 이상 설립",
+      "order": 1,
+      "published": true
+    }
+  ],
   "clubs": [
     {
       "id": "literature",
@@ -558,7 +562,8 @@ window.IDEAL_CONTENT = {
           "type": "p",
           "text": "<PC 프로그램 사용자 우대>"
         }
-      ]
+      ],
+      "number": "3"
     },
     {
       "id": "ai-use-guide",
@@ -632,7 +637,8 @@ window.IDEAL_CONTENT = {
           "type": "p",
           "text": "팀 이상은 국내 창작문화를 활성화하고 발전시키고자 하는 사람들이 모여 성장을 최우선가치로 삼아 하나의 꿈을 향해 열심히 협력하고 달려가는 팀입니다. 현재 진행중인 6기 모집도 많은 관심 부탁드리고, 앞으로도 팀 이상의 여정을 기쁘게 지켜봐주시기 바랍니다! 감사합니다."
         }
-      ]
+      ],
+      "number": "1"
     },
     {
       "id": "system-reform",
@@ -709,10 +715,18 @@ window.IDEAL_CONTENT = {
           "type": "p",
           "text": "항상 노력하고 성장하는 관리자, 부장이 되겠습니다. 잘 부탁드립니다."
         }
-      ]
+      ],
+      "number": "2"
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "id": "event-1",
+      "date": "2026-09-23",
+      "title": "6기 신입생 입학일",
+      "published": true
+    }
+  ],
   "works": [],
   "workSlots": [
     {

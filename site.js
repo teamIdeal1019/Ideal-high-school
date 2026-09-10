@@ -215,69 +215,53 @@
         }
     });
     // --- 공지사항 공통 ---
-    // 게시글은 fallback-content.js의 posts 한 곳에서 관리합니다.
-    // order가 작을수록 먼저 표시하고, 같은 순서라면 최신 게시일이 우선입니다.
-    // published: false인 초안은 previewDrafts가 켜져 있을 때만 보입니다.
-    const allPosts = () => D.posts
-        .filter(p => p.published || D.site.previewDrafts)
+    // 게시일이 최신인 글이 먼저 오며, 같은 날짜면 번호가 큰 글을 우선합니다.
+    const postNumber = p => {
+        const n = Number(String(p?.number ?? '').replace(/[^0-9.-]/g, ''));
+        return Number.isFinite(n) ? n : 0;
+    };
+    const allPosts = () => (Array.isArray(D.posts) ? D.posts : [])
+        .filter(p => p && (p.published !== false || D.site.previewDrafts))
         .sort((a, b) =>
-            (a.order ?? 100) - (b.order ?? 100) ||
-            (b.date || '').localeCompare(a.date || '')
+            (b.date || '').localeCompare(a.date || '') ||
+            postNumber(b) - postNumber(a)
         );
 
+    const latestPost = () => allPosts()[0] || null;
     const postUrl = p => `post.html?id=${encodeURIComponent(p.id)}`;
     const noticeHome = 'index.html#notices';
 
-    // 현재 모집은 대표 모집글을 우선 사용합니다.
-    // 지난 기수의 모집 기록을 현재 모집으로 잘못 인식하지 않도록 archive를 제외합니다.
-    const recruitment = () => {
-        const posts = D.posts.filter(p =>
-            p.category === '모집' && !p.archive &&
-            (p.published || D.site.previewDrafts)
-        );
-        return posts.find(p => p.featured) ||
-            posts.find(p => p.published) ||
-            posts[0] || null;
-    };
-
     // --- 모집 상태 ---
-    function recruitmentState(p) {
-        // 공지 없음
-        if (!p || p.published === false || p.archive) {
-            return {
-                label: '모집 준비 중',
-                open: false
-            };
-        }
+    const isDate = value => /^\d{4}-\d{2}-\d{2}$/.test(value || '');
+    const addMonths = (value, months) => {
+        if (!isDate(value)) return '';
+        const [year, month, day] = value.split('-').map(Number);
+        const index = (month - 1) + months;
+        const targetYear = year + Math.floor(index / 12);
+        const targetMonthIndex = ((index % 12) + 12) % 12;
+        const lastDay = new Date(Date.UTC(targetYear, targetMonthIndex + 1, 0)).getUTCDate();
+        return `${targetYear}-${String(targetMonthIndex + 1).padStart(2,'0')}-${String(Math.min(day,lastDay)).padStart(2,'0')}`;
+    };
+    function recruitmentState(admission) {
         const now = today();
-        // 날짜 형식 오류
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(p.start || '') ||
-            !/^\d{4}-\d{2}-\d{2}$/.test(p.end || '') ||
-            p.start > p.end) {
-            return {
-                label: '일정 확인 중',
-                open: false
-            };
+        const start = admission?.start || '';
+        const end = admission?.end || '';
+        const resultDate = admission?.resultDate || '';
+
+        // 모집기간 안에서는 무조건 모집 중입니다.
+        if (isDate(start) && isDate(end) && start <= end && now >= start && now <= end) {
+            return {label: '모집 중', open: true};
         }
-        // 모집 전
-        if (p.start && now < p.start) {
-            return {
-                label: '모집 예정',
-                open: false
-            };
+        // 합격자 발표일로부터 2개월이 지난 뒤에는 다음 모집 준비 상태로 전환합니다.
+        const readyDate = addMonths(resultDate, 2);
+        if (readyDate && now >= readyDate) {
+            return {label: '모집 준비 중', open: false};
         }
-        // 모집 종료
-        if (p.end && now > p.end) {
-            return {
-                label: '모집 마감',
-                open: false
-            };
+        // 모집기간 밖의 나머지 날짜는 사용자 지정 규칙에 따라 모집 완료로 표시합니다.
+        if ((isDate(start) && isDate(end)) || isDate(resultDate)) {
+            return {label: '모집 완료', open: false};
         }
-        // 모집 진행 중
-        return {
-            label: '모집 중',
-            open: true
-        };
+        return {label: '모집 준비 중', open: false};
     }
     // 모집 기간
     const period = p => p?.start || p?.end
@@ -292,23 +276,23 @@
     // 모집 기간은 대표 모집 공지의 start/end와 연동합니다.
     // 실제 URL이 없으면 버튼을 비활성화하여 잘못된 주소로 이동하지 않게 합니다.
     function admissionSection() {
-        const p = recruitment();
         const admission = D.admission || {};
+        const newest = latestPost();
 
         // 메인에서 사용할 모집 안내 정보
         const title = admission.title || '7기 팀원 모집';
         const resultDate = admission.resultDate || '';
         const chatUrl = admission.openChatUrl || '';
         const schedule = {start: admission.start || '', end: admission.end || ''};
-        const status = recruitmentState(schedule);
+        const status = recruitmentState(admission);
 
         // 날짜가 확정되지 않았을 때는 임의의 날짜를 표시하지 않습니다.
         const resultLabel = /^\d{4}-\d{2}-\d{2}$/.test(resultDate)
             ? date(resultDate)
             : '발표일 미정';
 
-        // 모집글이 없으면 홈의 공지사항으로 이동합니다.
-        const recruitmentUrl = safeUrl(admission.guidelinesUrl) || (p ? postUrl(p) : noticeHome);
+        // 모집요강은 별도 URL을 관리하지 않고 가장 최신 공지글에 자동 연결합니다.
+        const recruitmentUrl = newest ? postUrl(newest) : noticeHome;
 
         // 외부 오픈채팅 링크는 기존의 안전한 URL 처리 도구를 사용합니다.
         const chatButton = safeUrl(chatUrl)
@@ -330,7 +314,7 @@
 
           <div class="recruitment-panel">
             <div class="recruitment-summary">
-              <span class="status-badge">${E(admission.status || status.label)}</span>
+              <span class="status-badge">${E(status.label)}</span>
               <h3>${E(title)}</h3>
               <p>${E(admission.description || '')}</p>
             </div>
@@ -714,7 +698,7 @@
                 ? `<time datetime="${E(p.date)}">${E(date(p.date))}</time>` : '';
             const category = p.category || '공지';
             return `<tr class="home-board-row">
-                <td class="home-board-number">${String(i + 1).padStart(2,'0')}</td>
+                <td class="home-board-number">${E(p.number || String(i + 1))}</td>
                 <td class="home-board-category"><span class="board-category-label">${E(category)}</span></td>
                 <th scope="row" class="home-board-title">
                     ${a(postUrl(p),E(p.title),'home-board-link')}
@@ -736,6 +720,9 @@
     }
     // --- 홈 ---
     function home() {
+        const newest = latestPost();
+        const admissionUrl = newest ? postUrl(newest) : noticeHome;
+        const youtubeUrl = safeUrl(D.site.youtubeUrl);
         root.innerHTML =
             `<div class="home-intro-screen" id="home">
       <section
@@ -772,9 +759,9 @@
             <!-- 홈 버튼 -->
             <div class="hero-actions">
 
-              ${a('index.html#admission', '입학 안내 →', 'button button-light')}
+              ${a(admissionUrl, '입학 안내 →', 'button button-light')}
 
-              ${a('index.html#plaza', '작품 보러가기 →', 'button button-outline')}
+              ${youtubeUrl ? a(youtubeUrl, '작품 보러가기 →', 'button button-outline', true) : '<span class="unavailable-link">작품 보러가기 · 링크 준비 중</span>'}
 
             </div>
 
@@ -868,18 +855,17 @@
 
         </div>`, 'section-gray')
                 +
-                    section(`${head('팀 이상 연혁', '함께 지나온 시간을 기록하는 공간입니다.')}
+                    section(`${head('연혁', '함께 지나온 시간을 기록하는 공간입니다.')}
 
         <div class="history-table-wrap">
           <table class="history-table">
-            <thead><tr><th scope="col">날짜</th><th scope="col">연혁</th><th scope="col">설명</th></tr></thead>
+            <thead><tr><th scope="col">날짜</th><th scope="col">연혁내용</th></tr></thead>
             <tbody>
               ${(Array.isArray(D.history) ? [...D.history] : [])
                 .sort((a,b) => (a.order ?? 100) - (b.order ?? 100))
                 .map(h => `<tr>
                   <td>${E(h.date || '')}</td>
-                  <th scope="row">${E(h.title)}</th>
-                  <td>${E(h.text || '')}</td>
+                  <th scope="row">${E(h.text || '')}</th>
                 </tr>`).join('')}
             </tbody>
           </table>
@@ -1040,33 +1026,51 @@
     `, 'life-section');
     }
     // --- 학사일정 데이터 ---
+    // 구글 시트의 `학사일정` 탭은 기존처럼 `날짜` + `일정명` 두 열만 사용합니다.
+    // 화면에서는 선택한 달을 달력에 표시하고, 같은 반기(1~6월 / 7~12월)의
+    // 일정을 아래 목록에 자동으로 묶어 보여줍니다.
     const monthEvents = (year, month) => {
-        const start = `${year}-${String(month).padStart(2, '0')}-01`;
-        const end = `${year}-${String(month).padStart(2, '0')}-${String(new Date(year, month, 0).getDate()).padStart(2, '0')}`;
-        return D.events.filter(e => e.date && e.date <= end &&
-            (e.endDate && e.endDate >= e.date ? e.endDate : e.date) >= start)
+        const prefix = `${year}-${String(month).padStart(2, '0')}-`;
+        return (Array.isArray(D.events) ? D.events : [])
+            .filter(e => e.date && e.date.startsWith(prefix))
             .sort((a, b) => a.date.localeCompare(b.date));
     };
-    const eventEnd = e => e.endDate && e.endDate >= e.date ? e.endDate : e.date;
-    const eventDate = e => eventEnd(e) !== e.date
-        ? `${date(e.date)} ~ ${date(eventEnd(e))}` : date(e.date);
+    const halfEvents = (year, half) => {
+        const startMonth = half === 1 ? 1 : 7;
+        const endMonth = half === 1 ? 6 : 12;
+        return (Array.isArray(D.events) ? D.events : [])
+            .filter(e => {
+                if (!e.date || !e.date.startsWith(`${year}-`)) return false;
+                const month = Number(e.date.slice(5, 7));
+                return month >= startMonth && month <= endMonth;
+            })
+            .sort((a, b) => a.date.localeCompare(b.date));
+    };
+    const eventDate = e => date(e.date);
+    const eventMonthDay = e => e.date && /^\d{4}-\d{2}-\d{2}$/.test(e.date)
+        ? `${e.date.slice(5, 7)}.${e.date.slice(8, 10)}`
+        : '일정 미정';
     let calendarCursor = null;
     let galleryFilter = '전체';
+
     // --- 학사일정 페이지 ---
     function calendar() {
         root.innerHTML =
-            pageHero('학사일정', '월별 달력과 일정표로 팀의 활동을 확인하세요.')
+            pageHero('학사일정', '월별 달력과 반기별 일정표로 팀의 활동을 확인하세요.')
                 +
-                    section(`${head('학사 일정', '날짜가 확정된 일정만 달력에 표시됩니다.')}
+                section(`${head('학사 일정', '구글 시트에 날짜와 일정명을 입력하면 달력과 학사일정표에 자동으로 반영됩니다.')}
 
-        <div class="calendar-shell">
+        <div class="calendar-shell calendar-shell-wide">
 
-          <!-- 달력 -->
+          <!-- 월간 달력 -->
           <div class="calendar-card card">
 
             <div class="cal-head">
 
-              <h2 id="cal-month"></h2>
+              <div>
+                <span class="cal-eyebrow">MONTHLY CALENDAR</span>
+                <h2 id="cal-month"></h2>
+              </div>
 
               <div class="cal-nav">
 
@@ -1104,53 +1108,63 @@
 
           </div>
 
-
-          <!-- 월간 일정 -->
-          <aside class="schedule-table card">
-
-            <h3>
-              월간 일정
-            </h3>
-
-            <div id="schedule-month"></div>
-
-          </aside>
-
         </div>
 
 
-        <!-- 전체 일정 -->
-        <div class="schedule-all card">
+        <!-- 선택한 달이 속한 반기의 전체 일정 -->
+        <div class="schedule-half card">
 
-          <h3>
-            전체 일정표
-          </h3>
-
-          <div class="table-scroll">
-
-            <table>
-
-              <thead>
-                <tr>
-                  <th>날짜</th>
-                  <th>일정</th>
-                  <th>내용</th>
-                </tr>
-              </thead>
-
-              <tbody id="schedule-all"></tbody>
-
-            </table>
-
+          <div class="schedule-half-head">
+            <div>
+              <span class="schedule-half-year" id="schedule-half-year"></span>
+              <h3 id="schedule-half-title"></h3>
+            </div>
+            <p class="schedule-half-range" id="schedule-half-range"></p>
           </div>
 
-        </div>`);
+          <div class="schedule-half-list" id="schedule-half"></div>
+
+        </div>`, 'calendar-section');
         setupCalendar();
     }
+
     // --- 달력 동작 ---
     function setupCalendar() {
         let cursor = calendarCursor || todayDate();
         const grid = document.querySelector('#calendar-grid');
+        const scheduleHalf = document.querySelector('#schedule-half');
+
+        const renderHalfSchedule = (year, month) => {
+            const half = month <= 6 ? 1 : 2;
+            const startMonth = half === 1 ? 1 : 7;
+            const endMonth = half === 1 ? 6 : 12;
+            const all = halfEvents(year, half);
+
+            document.querySelector('#schedule-half-year').textContent = `${year}년`;
+            document.querySelector('#schedule-half-title').textContent =
+                half === 1 ? '상반기 학사일정' : '하반기 학사일정';
+            document.querySelector('#schedule-half-range').textContent =
+                `${startMonth}월 — ${endMonth}월`;
+
+            scheduleHalf.innerHTML = Array.from({length: 6}, (_, index) => {
+                const targetMonth = startMonth + index;
+                const items = all.filter(e => Number(e.date.slice(5, 7)) === targetMonth);
+                return `<section class="schedule-month-group" aria-label="${targetMonth}월 일정">
+                  <div class="schedule-month-label">
+                    <strong>${targetMonth}월</strong>
+                  </div>
+                  <div class="schedule-month-items">
+                    ${items.length
+                        ? items.map(e => `<div class="schedule-half-row">
+                            <time datetime="${E(e.date)}">${E(eventMonthDay(e))}</time>
+                            <span>${E(e.title)}</span>
+                          </div>`).join('')
+                        : '<div class="schedule-half-row schedule-half-empty"><span>등록된 일정이 없습니다.</span></div>'}
+                  </div>
+                </section>`;
+            }).join('');
+        };
+
         // 달력 그리기
         const draw = () => {
             const y = cursor.getFullYear();
@@ -1158,131 +1172,54 @@
             const first = new Date(y, m - 1, 1).getDay();
             const days = new Date(y, m, 0).getDate();
             const events = monthEvents(y, m);
+
             // 연월 표시
-            document
-                .querySelector('#cal-month')
-                .textContent =
-                `${y}년 ${m}월`;
+            document.querySelector('#cal-month').textContent = `${y}년 ${m}월`;
             calendarCursor = new Date(y, m - 1, 1);
+
             // 요일
-            let html = [
-                '일',
-                '월',
-                '화',
-                '수',
-                '목',
-                '금',
-                '토'
-            ]
-                .map(d => `<div class="weekday">
-                ${d}
-              </div>`)
+            let html = ['일', '월', '화', '수', '목', '금', '토']
+                .map((d, index) => `<div class="weekday${index === 0 ? ' sunday' : index === 6 ? ' saturday' : ''}">${d}</div>`)
                 .join('');
+
             // 첫째 주 빈칸
             for (let i = 0; i < first; i++) {
-                html +=
-                    '<div class="day muted" aria-hidden="true"></div>';
+                html += '<div class="day muted" aria-hidden="true"></div>';
             }
+
             // 날짜
             for (let d = 1; d <= days; d++) {
                 const key = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                const items = events.filter(e => e.date <= key && eventEnd(e) >= key);
-                html +=
-                    `<div class="day${key === today()
-                        ? ' today'
-                        : ''}">
-
-            <span class="day-num">
-              ${d}
-            </span>
-
-            ${items
-                        .map(e => `<span
-                      class="day-event"
-                      title="${E(e.title)}"
-                    >
-                      ${E(e.title)}
-                    </span>`)
-                        .join('')}
-
-          </div>`;
+                const items = events.filter(e => e.date === key);
+                const weekday = new Date(y, m - 1, d).getDay();
+                html += `<div class="day${key === today() ? ' today' : ''}${weekday === 0 ? ' sunday' : weekday === 6 ? ' saturday' : ''}">
+                  <span class="day-num">${d}</span>
+                  ${items.map(e => `<span class="day-event" title="${E(e.title)}">${E(e.title)}</span>`).join('')}
+                </div>`;
             }
-            // 달력 표시
+
             grid.innerHTML = html;
-            // 월간 일정
-            document
-                .querySelector('#schedule-month')
-                .innerHTML =
-                events.length
-                    ? events
-                        .map(e => `<div class="schedule-row">
-
-                    <span class="schedule-date">
-                      ${E(eventDate(e))}
-                    </span>
-
-                    <strong>
-                      ${E(e.title)}
-                    </strong>
-
-                    <p>
-                      ${E(e.description || '')}
-                    </p>
-
-                  </div>`)
-                        .join('')
-                    : '<p class="empty-state">이달에 등록된 일정이 없습니다.</p>';
-            // 전체 일정
-            document
-                .querySelector('#schedule-all')
-                .innerHTML =
-                D.events.length
-                    ? [...D.events]
-                        .filter(e => e.date)
-                        .sort((a, b) => a.date.localeCompare(b.date))
-                        .map(e => `<tr>
-                    <td>
-                      ${E(eventDate(e))}
-                    </td>
-
-                    <td>
-                      ${E(e.title)}
-                    </td>
-
-                    <td>
-                      ${E(e.description || '')}
-                    </td>
-                  </tr>`)
-                        .join('')
-                    : '<tr><td colspan="3">확정된 일정이 등록되면 이곳에 표시됩니다.</td></tr>';
+            renderHalfSchedule(y, m);
         };
+
         // 이전 달
-        document
-            .querySelector('#cal-prev')
-            .onclick =
-            () => {
-                cursor =
-                    new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1);
-                draw();
-            };
+        document.querySelector('#cal-prev').onclick = () => {
+            cursor = new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1);
+            draw();
+        };
+
         // 다음 달
-        document
-            .querySelector('#cal-next')
-            .onclick =
-            () => {
-                cursor =
-                    new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
-                draw();
-            };
+        document.querySelector('#cal-next').onclick = () => {
+            cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+            draw();
+        };
+
         // 오늘
-        document
-            .querySelector('#cal-today')
-            .onclick =
-            () => {
-                cursor = todayDate();
-                draw();
-            };
-        // 최초 표시
+        document.querySelector('#cal-today').onclick = () => {
+            cursor = todayDate();
+            draw();
+        };
+
         draw();
     }
     // --- 공지 본문 블록 ---
@@ -1381,8 +1318,8 @@
         const meta = hasDate ? `<time datetime="${E(p.date)}">${E(date(p.date))}</time>` : '';
 
         // 지난 모집 자료에는 현재 모집 상태나 지원서 제출 버튼을 붙이지 않습니다.
-        const isCurrentRecruitment = p.category === '모집' && !p.archive;
-        const current = {...p, start: D.admission?.start || '', end: D.admission?.end || '', formUrl: D.admission?.formUrl || ''};
+        const isCurrentRecruitment = String(p.category || '').includes('모집');
+        const current = D.admission || {};
         const s = isCurrentRecruitment ? recruitmentState(current) : null;
 
         root.innerHTML = pageHero('공지사항', '팀 이상의 소식을 전합니다.') +
@@ -1402,10 +1339,6 @@
                     ${isCurrentRecruitment ? `<div class="post-info">
                         <strong>모집 상태 · ${E(s.label)}</strong>
                         <p>모집 기간: ${E(period(current))}</p>
-                        ${p.requirements?.length ? `<ul>${p.requirements.map(r => `<li>${E(r)}</li>`).join('')}</ul>` : ''}
-                        ${s.open && safeUrl(current.formUrl)
-                            ? ext(current.formUrl, '공식 지원서 작성 →', 'button button-navy')
-                            : note('현재 접수 가능한 공식 지원서가 없습니다. 공개된 모집 일정과 링크를 확인해 주세요.')}
                     </div>` : ''}
                 </div>
 

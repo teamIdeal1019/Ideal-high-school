@@ -1184,6 +1184,11 @@ img {
     border-right: 0;
   }
 
+  /* 1000px 규칙에서 3번째 카드의 오른쪽 선이 제거되므로 모바일에서 명시적으로 복구합니다. */
+  .category-card:nth-child(3) {
+    border-right: 1px solid var(--line);
+  }
+
   .category-card:last-child {
     grid-column: 1/-1;
     border-bottom: 0 !important;
@@ -4408,3 +4413,280 @@ body[data-page="about"] .section-head::after { display: none; }
 }
 .post-body ol { padding-left: 25px; }
 .post-body li + li { margin-top: 7px; }
+
+
+/* 2026-09-10 CMS 단순화: 학사일정은 날짜+일정, 연혁은 날짜+내용 두 열만 사용합니다. */
+.schedule-all table th:first-child,
+.schedule-all table td:first-child {
+  width: 180px;
+  white-space: nowrap;
+}
+.schedule-all table th:last-child,
+.schedule-all table td:last-child {
+  width: auto;
+}
+.history-table tbody td:first-child {
+  width: 190px;
+}
+@media (max-width: 600px) {
+  .schedule-all table th:first-child,
+  .schedule-all table td:first-child {
+    width: 126px;
+  }
+  .history-table {
+    min-width: 420px;
+  }
+  .history-table tbody td:first-child {
+    width: 145px;
+  }
+}
+
+/* 모바일 메인 카테고리: 학교생활(3번째)과 동아리활동(4번째) 사이 세로 구분선 복구 */
+@media (max-width: 780px) {
+  .category-card:nth-child(3) {
+    border-right: 1px solid var(--line) !important;
+  }
+}
+
+
+/* =========================================================
+   2026-09-10 학사일정 개편
+   - 월간 달력은 전체 폭으로 표시
+   - 선택한 월이 속한 반기(1~6월 / 7~12월)를 아래에 한꺼번에 표시
+   - 데이터 원본은 기존 Google Sheets `학사일정` 탭의 날짜+일정명 두 열 유지
+   ========================================================= */
+.calendar-section .calendar-shell-wide {
+  display: block;
+}
+
+.calendar-section .calendar-card {
+  padding: 30px;
+}
+
+.calendar-section .cal-head {
+  margin-bottom: 22px;
+}
+
+.cal-eyebrow,
+.schedule-half-year {
+  display: block;
+  margin-bottom: 5px;
+  color: #8390a0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.calendar-section .cal-head h2 {
+  font-size: 27px;
+  letter-spacing: -.025em;
+}
+
+.calendar-section .calendar-grid {
+  border-radius: 10px;
+}
+
+.calendar-section .weekday {
+  padding: 10px 8px;
+  color: #667382;
+  background: #f5f7fa;
+}
+
+.calendar-section .weekday.sunday,
+.calendar-section .day.sunday .day-num {
+  color: #9c5f66;
+}
+
+.calendar-section .weekday.saturday,
+.calendar-section .day.saturday .day-num {
+  color: #56708e;
+}
+
+.calendar-section .day {
+  min-height: 104px;
+  padding: 9px;
+  background: #fff;
+}
+
+.calendar-section .day.muted {
+  background: #f8fafc;
+}
+
+.calendar-section .day-event {
+  padding: 5px 6px;
+  border-radius: 5px;
+  background: #e8edf3;
+  color: var(--navy-800);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.schedule-half {
+  margin-top: 24px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.schedule-half-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px 28px 22px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.schedule-half-head h3 {
+  margin: 0;
+  color: var(--navy-900);
+  font-size: 23px;
+  letter-spacing: -.02em;
+}
+
+.schedule-half-range {
+  margin: 0 0 2px;
+  color: #718091;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.schedule-half-list {
+  padding: 0 28px 8px;
+}
+
+.schedule-month-group {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.schedule-month-group:last-child {
+  border-bottom: 0;
+}
+
+.schedule-month-label {
+  padding: 20px 18px 20px 2px;
+}
+
+.schedule-month-label strong {
+  color: var(--navy-900);
+  font-size: 17px;
+  letter-spacing: -.02em;
+}
+
+.schedule-month-items {
+  min-width: 0;
+  border-left: 1px solid var(--gray-200);
+  padding: 8px 0 8px 20px;
+}
+
+.schedule-half-row {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  min-height: 42px;
+  padding: 10px 4px;
+}
+
+.schedule-half-row + .schedule-half-row {
+  border-top: 1px solid #edf0f4;
+}
+
+.schedule-half-row time {
+  color: #7a8795;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.schedule-half-row span {
+  color: var(--navy-900);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.schedule-half-row.schedule-half-empty {
+  display: flex;
+  align-items: center;
+}
+
+.schedule-half-row.schedule-half-empty span {
+  color: #a0a9b4;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media (max-width: 720px) {
+  .calendar-section .calendar-card {
+    padding: 18px;
+  }
+
+  .calendar-section .cal-head {
+    align-items: flex-end;
+  }
+
+  .cal-eyebrow {
+    display: none;
+  }
+
+  .calendar-section .cal-head h2 {
+    font-size: 20px;
+  }
+
+  .calendar-section .day {
+    min-height: 70px;
+    padding: 4px;
+  }
+
+  .calendar-section .day-event {
+    padding: 3px;
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  .schedule-half-head {
+    align-items: flex-start;
+    padding: 21px 18px 17px;
+  }
+
+  .schedule-half-head h3 {
+    font-size: 20px;
+  }
+
+  .schedule-half-list {
+    padding: 0 18px 5px;
+  }
+
+  .schedule-month-group {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+
+  .schedule-month-label {
+    padding: 17px 8px 17px 0;
+  }
+
+  .schedule-month-label strong {
+    font-size: 14px;
+  }
+
+  .schedule-month-items {
+    padding-left: 12px;
+  }
+
+  .schedule-half-row {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 8px;
+    min-height: 38px;
+    padding: 9px 2px;
+  }
+
+  .schedule-half-row time {
+    font-size: 11px;
+  }
+
+  .schedule-half-row span {
+    font-size: 13px;
+  }
+}

@@ -6,11 +6,10 @@
  * 빈 값인 동안에는 fallback-content.js의 안전한 기본 콘텐츠가 표시됩니다.
  */
 window.IDEAL_CMS_CONFIG = {
-  apiUrl: "",
+  apiUrl: "https://script.google.com/macros/s/AKfycbytt2agTqQVvnmyBZ98-X0sx3gYwiSk-IheX1ImlcJae-cwFjVvzzWH6fu3ZzuZYtKq/exec",
   siteUrl: "https://ideal.sen.hs.io.kr/",
-  // local: 사이트 파일의 공지사항을 사용합니다. sheets: 시트의 공지사항을 사용합니다.
-  noticesSource: "local",
-  sheetUrl: "https://docs.google.com/spreadsheets/d/1QaU5QsDVSaiLKKay0TLmfus-Lc5FVPjjqqmBV8igGBA/edit",
+  // 새 CMS 스프레드시트를 Google Sheets로 올린 뒤 그 주소를 기록해 둘 수 있습니다.
+  sheetUrl: "https://docs.google.com/spreadsheets/d/1LMJAuGOzNZPqzRtF6s7Z9v3YlOEdJTNly3Yt88hpDU0/edit?gid=1314616080#gid=1314616080",
   requestTimeout: 12000
 };
 
