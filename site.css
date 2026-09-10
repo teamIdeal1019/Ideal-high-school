@@ -4690,3 +4690,953 @@ body[data-page="about"] .section-head::after { display: none; }
     font-size: 13px;
   }
 }
+
+/* ============================================================
+   공지 상세페이지 · 타이포그래피 위계 재정립 (2026-09-10)
+   - 본문/목록 가독성 기준 16px 이상
+   - 데스크톱/모바일에서 H1 > H2 > H3 위계를 명확히 유지
+   - 다른 페이지에는 영향을 주지 않도록 .post 범위로 한정
+   ============================================================ */
+.post {
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.post-head {
+  padding-bottom: 28px;
+}
+
+.post-category {
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: -.015em;
+}
+
+.post h1 {
+  margin: 14px 0 10px;
+  font-size: clamp(32px, 3vw, 38px);
+  line-height: 1.22;
+  font-weight: 800;
+  letter-spacing: -.04em;
+}
+
+.post time,
+.post-status-label {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.post-body {
+  padding: 38px 0 34px;
+  color: #46515e;
+  font-size: 17px;
+  line-height: 1.82;
+}
+
+.post-body p {
+  margin: 0 0 22px;
+  color: #46515e;
+  font-size: 17px;
+  line-height: 1.82;
+  font-weight: 400;
+}
+
+.post-body h2 {
+  margin: 42px 0 16px;
+  color: var(--navy-900);
+  font-size: 26px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: -.035em;
+}
+
+.post-body h2:first-child {
+  margin-top: 0;
+}
+
+.post-body h3 {
+  margin: 30px 0 11px;
+  color: var(--navy-900);
+  font-size: 20px;
+  line-height: 1.45;
+  font-weight: 700;
+  letter-spacing: -.025em;
+}
+
+.post-body ul,
+.post-body ol {
+  margin: 12px 0 26px;
+  padding-left: 1.55em;
+  color: #46515e;
+  font-size: 16px;
+  line-height: 1.85;
+  font-weight: 400;
+}
+
+.post-body li + li {
+  margin-top: 6px;
+}
+
+.post-body li::marker {
+  color: #8090a4;
+}
+
+.post-body strong {
+  font-weight: 700;
+  color: #263547;
+}
+
+.post-body .post-callout {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.post-table {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.post-table th {
+  font-weight: 700;
+}
+
+.post-link strong {
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+.post-link small {
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.post-info {
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.post-info strong {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.post-info p {
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.post-source {
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.post-source strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.post-source p {
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+@media (max-width: 780px) {
+  .post-head {
+    padding-bottom: 23px;
+  }
+
+  .post h1 {
+    font-size: clamp(27px, 7.2vw, 31px);
+    line-height: 1.24;
+  }
+
+  .post-body {
+    padding: 30px 0 28px;
+    font-size: 16px;
+    line-height: 1.78;
+  }
+
+  .post-body p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.78;
+  }
+
+  .post-body h2 {
+    margin: 36px 0 14px;
+    font-size: 22px;
+    line-height: 1.38;
+    font-weight: 800;
+  }
+
+  .post-body h3 {
+    margin: 26px 0 9px;
+    font-size: 18px;
+    line-height: 1.45;
+    font-weight: 700;
+  }
+
+  .post-body ul,
+  .post-body ol {
+    margin: 10px 0 23px;
+    padding-left: 1.4em;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .post-body .post-callout,
+  .post-info,
+  .post-info p,
+  .post-table {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .post h1 {
+    font-size: 27px;
+  }
+
+  .post-body h2 {
+    font-size: 21px;
+  }
+
+  .post-body h3 {
+    font-size: 18px;
+  }
+}
+
+/* ============================================================
+   GLOBAL TYPOGRAPHY SYSTEM · 2026-09-10
+   ------------------------------------------------------------
+   Site-wide readable type scale with stable desktop/mobile hierarchy.
+   Layout, colors, interactions and CMS behavior are intentionally untouched.
+   ============================================================ */
+:root {
+  --type-body: 16px;
+  --type-body-lg: 17px;
+  --type-small: 14px;
+  --type-label: 12px;
+  --type-card-title: 19px;
+  --type-subheading: 21px;
+  --type-heading: 27px;
+  --type-section: clamp(30px, 3vw, 40px);
+  --type-page: clamp(34px, 4vw, 44px);
+  --type-hero: clamp(42px, 5vw, 58px);
+}
+
+body {
+  font-size: var(--type-body);
+  line-height: 1.7;
+}
+
+/* Global navigation and controls */
+.nav a {
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.button,
+.filter-button,
+.more-link,
+.plaza-all,
+.cal-nav button {
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+/* Home hero */
+.hero-kicker {
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+.hero h1 {
+  font-size: var(--type-hero);
+  line-height: 1.16;
+  font-weight: 800;
+  letter-spacing: -.055em;
+}
+.hero-desc {
+  font-size: 17px;
+  line-height: 1.72;
+}
+
+/* Shared section hierarchy */
+.eyebrow {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.section-title {
+  font-size: var(--type-section);
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -.045em;
+}
+.section-lead,
+.editor-note {
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+/* Interior-page hero */
+.page-hero h1 {
+  font-size: var(--type-page);
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -.045em;
+}
+.page-hero p {
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* Home category menu */
+.category-card span {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.category-card strong {
+  font-size: 20px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+.category-card small {
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* Recruitment / feature cards */
+.admission-banner h3 {
+  font-size: 28px;
+  line-height: 1.32;
+  font-weight: 800;
+}
+.admission-banner p,
+.meta-row {
+  font-size: 15px;
+  line-height: 1.65;
+}
+.feature-link span,
+.status-badge {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.feature-link h4 {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.feature-link p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* Gallery / work cards */
+.work-badge {
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+.work-info h3,
+.gallery-page-grid .work-info h3 {
+  font-size: 19px;
+  line-height: 1.42;
+  font-weight: 800;
+}
+.work-info p,
+.gallery-page-grid .work-info p,
+.plaza-note,
+.gallery-count {
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* About / values / history */
+.leader-card h3,
+.values-grid h3 {
+  font-size: 21px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.leader-card p,
+.leader-message p,
+.values-grid p,
+.activity-list,
+.signature {
+  font-size: 16px;
+  line-height: 1.75;
+}
+.leader-message h2,
+.content-card h2 {
+  font-size: 27px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+.history-date {
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+.history-item h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.history-item p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* Calendar and schedule */
+.cal-head h2 {
+  font-size: 25px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+.weekday,
+.day {
+  font-size: 14px;
+}
+.day-num {
+  font-size: 14px;
+  line-height: 1.35;
+}
+.day-event {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.schedule-table h3,
+.schedule-all h3 {
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.schedule-row time,
+.schedule-all th {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.schedule-row strong,
+.schedule-all td {
+  font-size: 16px;
+  line-height: 1.65;
+}
+.empty-state {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* Club cards and school-life content */
+.club-no {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.club-card h2 {
+  font-size: 22px;
+  line-height: 1.38;
+  font-weight: 800;
+}
+.club-short,
+.club-desc,
+.club-greeting,
+.club-greeting blockquote,
+.activity-list li {
+  font-size: 16px;
+  line-height: 1.7;
+}
+.club-greeting strong {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* Notices list */
+.notice-category {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.notice-card h2 {
+  font-size: 19px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+.notice-card p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+.notice-card time {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* Article detail: keep hierarchy consistent with the global scale. */
+.post h1 {
+  font-size: clamp(32px, 3vw, 38px);
+}
+.post-body h2 {
+  font-size: 26px;
+}
+.post-body h3 {
+  font-size: 20px;
+}
+.post-body,
+.post-body p {
+  font-size: 17px;
+}
+.post-body ul,
+.post-body ol,
+.post-table,
+.post-info,
+.post-info p {
+  font-size: 16px;
+}
+
+/* Footer remains secondary, but never microscopically small. */
+.footer strong {
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+.footer p,
+.footer nav,
+.footer .footer-nav a {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 780px) {
+  :root {
+    --type-body: 16px;
+    --type-body-lg: 16px;
+    --type-card-title: 18px;
+    --type-subheading: 19px;
+    --type-heading: 23px;
+    --type-section: clamp(27px, 7.5vw, 32px);
+    --type-page: clamp(30px, 8.5vw, 36px);
+    --type-hero: clamp(36px, 10vw, 46px);
+  }
+
+  body {
+    font-size: 16px;
+    line-height: 1.68;
+  }
+
+  .nav a {
+    font-size: 16px;
+  }
+  .hero-kicker,
+  .eyebrow {
+    font-size: 12px;
+  }
+  .hero h1 {
+    font-size: var(--type-hero);
+    line-height: 1.15;
+  }
+  .hero-desc,
+  .page-hero p,
+  .section-lead,
+  .editor-note {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .page-hero h1 {
+    font-size: var(--type-page);
+  }
+  .section-title {
+    font-size: var(--type-section);
+  }
+
+  .category-card strong {
+    font-size: 19px;
+  }
+  .category-card small {
+    font-size: 14px;
+  }
+
+  .admission-banner h3 {
+    font-size: 24px;
+  }
+  .feature-link h4,
+  .history-item h3,
+  .work-info h3,
+  .gallery-page-grid .work-info h3,
+  .notice-card h2 {
+    font-size: 18px;
+  }
+  .leader-message h2,
+  .content-card h2 {
+    font-size: 23px;
+  }
+  .leader-card h3,
+  .values-grid h3,
+  .club-card h2,
+  .schedule-table h3,
+  .schedule-all h3 {
+    font-size: 20px;
+  }
+
+
+  .leader-card .portrait {
+    border-radius: 9px;
+  }
+
+  .leader-card p,
+  .leader-message p,
+  .values-grid p,
+  .history-item p,
+  .club-short,
+  .club-desc,
+  .club-greeting,
+  .club-greeting blockquote,
+  .activity-list,
+  .activity-list li,
+  .schedule-row strong,
+  .schedule-all td {
+    font-size: 16px;
+  }
+
+  .notice-card p,
+  .admission-banner p,
+  .meta-row,
+  .feature-link p,
+  .empty-state {
+    font-size: 15px;
+  }
+
+  /* Explicitly preserve article title hierarchy on small screens. */
+  .post h1 {
+    font-size: clamp(27px, 7.2vw, 31px);
+  }
+  .post-body h2 {
+    font-size: 22px;
+    font-weight: 800;
+  }
+  .post-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .post-body,
+  .post-body p,
+  .post-body ul,
+  .post-body ol,
+  .post-table,
+  .post-info,
+  .post-info p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-hero h1 {
+    font-size: 30px;
+  }
+  .section-title {
+    font-size: 27px;
+  }
+  .hero h1 {
+    font-size: 36px;
+  }
+  .post h1 {
+    font-size: 27px;
+  }
+  .post-body h2 {
+    font-size: 21px;
+  }
+  .post-body h3 {
+    font-size: 18px;
+  }
+}
+
+
+/* =========================================================
+   연혁 — 세로 타임라인
+   Google Sheets의 `날짜 / 연혁내용` 두 열만으로 자동 확장됩니다.
+   ========================================================= */
+body[data-page="about"] .history {
+  --history-axis: 146px;
+  position: relative;
+  margin-top: 38px;
+  padding: 2px 0 8px;
+}
+
+body[data-page="about"] .history::before {
+  content: "";
+  position: absolute;
+  left: var(--history-axis);
+  top: 14px;
+  bottom: 22px;
+  width: 2px;
+  background: #d9e0e8;
+  border-radius: 999px;
+}
+
+body[data-page="about"] .history-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  column-gap: 70px;
+  align-items: start;
+  padding: 0 0 42px;
+}
+
+body[data-page="about"] .history-item:last-child {
+  padding-bottom: 0;
+}
+
+body[data-page="about"] .history-item::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--history-axis) - 6px);
+  top: 9px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--navy-800);
+  box-shadow: 0 0 0 6px #f4f7fa;
+  z-index: 1;
+}
+
+body[data-page="about"] .history-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding-top: 0;
+  color: var(--navy-900);
+  font-style: normal;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+body[data-page="about"] .history-year {
+  display: block;
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -.025em;
+}
+
+body[data-page="about"] .history-day {
+  display: block;
+  margin-top: 4px;
+  color: #7b8795;
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+body[data-page="about"] .history-content {
+  min-width: 0;
+  padding: 1px 0 0;
+}
+
+body[data-page="about"] .history-content p,
+body[data-page="about"] .history-item .history-content p {
+  margin: 0;
+  color: var(--navy-900);
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 700;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 780px) {
+  body[data-page="about"] .history {
+    --history-axis: 78px;
+    margin-top: 30px;
+  }
+
+  body[data-page="about"] .history::before {
+    top: 12px;
+    bottom: 17px;
+  }
+
+  body[data-page="about"] .history-item {
+    grid-template-columns: 58px minmax(0, 1fr);
+    column-gap: 40px;
+    padding-bottom: 34px;
+  }
+
+  body[data-page="about"] .history-item::before {
+    top: 8px;
+  }
+
+  body[data-page="about"] .history-year {
+    font-size: 17px;
+  }
+
+  body[data-page="about"] .history-day {
+    margin-top: 3px;
+    font-size: 12px;
+  }
+
+  body[data-page="about"] .history-content p,
+  body[data-page="about"] .history-item .history-content p {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+}
+
+@media (max-width: 420px) {
+  body[data-page="about"] .history {
+    --history-axis: 70px;
+  }
+
+  body[data-page="about"] .history-item {
+    grid-template-columns: 52px minmax(0, 1fr);
+    column-gap: 36px;
+  }
+}
+
+/* =========================================================
+   학교소개 — 팀장 프로필 카드
+   증명사진 비율(3:4)에 맞는 이미지 슬롯과 문구 정리
+   ========================================================= */
+body[data-page="about"] .leader-card {
+  background-color: #fff;
+  background-image: var(--asset-bg-paper);
+  color: var(--navy-900);
+}
+
+body[data-page="about"] .leader-card .portrait {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  min-height: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #eef3f8, #dfe7f0);
+  display: block;
+  padding: 0;
+}
+
+body[data-page="about"] .leader-card .portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+body[data-page="about"] .leader-card h3 {
+  margin: 18px 0 0;
+  color: var(--navy-900);
+}
+
+body[data-page="about"] .leader-card p {
+  display: none;
+}
+
+body[data-page="about"] .leader-message h2 {
+  font-weight: 700;
+}
+
+@media (max-width: 780px) {
+  body[data-page="about"] .leader-card .portrait {
+    border-radius: 9px;
+  }
+}
+
+
+/* Final leader-profile refinement: image-only card, exact 3:4 portrait. */
+body[data-page="about"] .leader-card {
+  padding: 33px;
+}
+
+body[data-page="about"] .leader-card .portrait {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+body[data-page="about"] .leader-card .portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+body[data-page="about"] .leader-card h3,
+body[data-page="about"] .leader-card p {
+  display: none !important;
+}
+
+@media (max-width: 780px) {
+  body[data-page="about"] .leader-card .portrait {
+    border-radius: 7px;
+  }
+}
+
+
+/* Narrower 3:4 leader profile card: about 1/4 width on desktop */
+body[data-page="about"] .leader-layout {
+  grid-template-columns: minmax(180px, 0.25fr) minmax(0, 0.75fr);
+  align-items: start;
+  gap: 32px;
+}
+
+body[data-page="about"] .leader-card {
+  width: 100%;
+  max-width: 250px;
+  justify-self: start;
+  padding: 18px;
+}
+
+body[data-page="about"] .leader-card .portrait {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+@media (max-width: 960px) {
+  body[data-page="about"] .leader-layout {
+    grid-template-columns: minmax(160px, 0.28fr) minmax(0, 0.72fr);
+    gap: 24px;
+  }
+
+  body[data-page="about"] .leader-card {
+    max-width: 220px;
+    padding: 14px;
+  }
+}
+
+
+/* Even narrower 3:4 leader profile card */
+body[data-page="about"] .leader-layout {
+  grid-template-columns: minmax(120px, 0.18fr) minmax(0, 0.82fr);
+  gap: 28px;
+}
+
+body[data-page="about"] .leader-card {
+  max-width: 180px;
+  padding: 12px;
+}
+
+@media (max-width: 960px) {
+  body[data-page="about"] .leader-layout {
+    grid-template-columns: minmax(110px, 0.2fr) minmax(0, 0.8fr);
+    gap: 20px;
+  }
+
+  body[data-page="about"] .leader-card {
+    max-width: 160px;
+    padding: 10px;
+  }
+}

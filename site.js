@@ -789,32 +789,30 @@
         root.innerHTML =
             pageHero('학교소개', '팀 이상의 가치관과 우리가 걸어온 길을 소개합니다.')
                 +
-                    section(`${head('팀장이 전하는 이야기')}
+                    section(`${head('팀장 인사말')}
 
-        ${note('아래 인삿말은 팀장 확인 전 제안문입니다. 실제 팀장의 말씀으로 수정한 뒤 게시해 주세요.')}
-
-        <div class="leader-layout">
+                <div class="leader-layout">
 
           <div class="leader-card card">
 
             <div class="portrait">
-              팀장 사진 등록 공간
+              <img
+                src="${E(D.leader.photo || 'assets/profile/leader-profile-placeholder.webp')}"
+                alt="${E(D.leader.photoAlt || `${D.leader.role || '팀장'} 프로필 사진`)}"
+                width="600"
+                height="800"
+                loading="lazy"
+                decoding="async"
+              >
             </div>
 
-            <h3>
-              ${E(D.leader.name)}
-            </h3>
-
-            <p>
-              ${E(D.leader.role)} · 팀 이상
-            </p>
 
           </div>
 
           <div class="leader-message">
 
             <h2>
-              함께 만들어가는 이상
+              함께 이루어가는 이상
             </h2>
 
             ${D.leader.paragraphs
@@ -857,18 +855,26 @@
                 +
                     section(`${head('연혁', '함께 지나온 시간을 기록하는 공간입니다.')}
 
-        <div class="history-table-wrap">
-          <table class="history-table">
-            <thead><tr><th scope="col">날짜</th><th scope="col">연혁내용</th></tr></thead>
-            <tbody>
-              ${(Array.isArray(D.history) ? [...D.history] : [])
-                .sort((a,b) => (a.order ?? 100) - (b.order ?? 100))
-                .map(h => `<tr>
-                  <td>${E(h.date || '')}</td>
-                  <th scope="row">${E(h.text || '')}</th>
-                </tr>`).join('')}
-            </tbody>
-          </table>
+        <div class="history" aria-label="연혁 타임라인">
+          ${(Array.isArray(D.history) ? [...D.history] : [])
+            .sort((a,b) => (a.order ?? 100) - (b.order ?? 100))
+            .map(h => {
+              const rawDate = String(h.date || '').trim();
+              const m = rawDate.match(/^(\d{4})[-./](\d{1,2})[-./](\d{1,2})/);
+              const year = m ? m[1] : '';
+              const monthDay = m ? `${String(Number(m[2])).padStart(2,'0')}.${String(Number(m[3])).padStart(2,'0')}` : rawDate;
+              const label = m ? `${year}.${monthDay}.` : rawDate;
+              return `<article class="history-item">
+                <time class="history-date"${m ? ` datetime="${year}-${String(Number(m[2])).padStart(2,'0')}-${String(Number(m[3])).padStart(2,'0')}"` : ''}>
+                  ${year ? `<span class="history-year">${E(year)}</span>` : ''}
+                  <span class="history-day">${E(monthDay)}</span>
+                  <span class="sr-only">${E(label)}</span>
+                </time>
+                <div class="history-content">
+                  <p>${E(h.text || '')}</p>
+                </div>
+              </article>`;
+            }).join('')}
         </div>`);
     }
     // --- 동아리활동 ---
@@ -876,7 +882,7 @@
         root.innerHTML =
             pageHero('동아리활동', '여섯 부서가 서로 다른 재능을 연결해 하나의 작품을 만듭니다.')
                 +
-                    section(`${head('여섯 부서의 이야기', '각 부서의 활동과 부장이 전하는 인삿말을 확인하세요.')}
+                    section(`${head('여섯 부서의 이야기', '각 부서의 활동과 부장이 전하는 인사말을 확인하세요.')}
 
         <div class="club-grid">
 
@@ -921,12 +927,12 @@
                     <div class="club-greeting">
 
                       <strong>
-                        ${E(c.head || '부장 인삿말')}
+                        ${E(c.head || '부장 인사말')}
                       </strong>
 
                       <blockquote>
                         ${E(c.greeting ||
-                        '부장님의 인삿말을 준비 중입니다. 실제 인삿말을 전달받은 뒤 등록하겠습니다.')}
+                        '부장님의 인사말을 준비 중입니다. 실제 인사말을 전달받은 뒤 등록하겠습니다.')}
                       </blockquote>
 
                     </div>

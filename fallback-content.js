@@ -62,6 +62,8 @@ window.IDEAL_CONTENT = {
   "leader": {
     "name": "한란",
     "role": "팀장",
+    "photo": "assets/profile/leader-profile-placeholder.webp",
+    "photoAlt": "팀장 프로필 사진",
     "draft": true,
     "paragraphs": [
       "안녕하세요. 팀 이상 팀장 한란입니다. 팀 이상은 ~~~설명. 함께 성장하고 싶은 창작자 여러분을 환영합니다."
