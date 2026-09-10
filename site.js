@@ -367,20 +367,15 @@
     // 등록된 작품만 실제 개수에 포함합니다. 대기 공간은 제외합니다.
     function works() {
         return Array.isArray(D.works)
-            ? D.works.filter(w => w && w.title && !w.sample && w.published !== false).sort((a,b)=>(a.order ?? 100)-(b.order ?? 100))
+            ? D.works
+                .filter(w => w && w.title && !w.sample && w.published !== false)
+                // 구글시트에서 아래쪽에 등록한 행일수록 사이트에서는 먼저 표시합니다.
+                .sort((a,b)=>(b.order ?? 0)-(a.order ?? 0))
             : [];
     }
-    // 작품 공간 · 각 대기 슬롯은 독립적인 ID와 분류를 갖습니다.
-    // 시트에 실제 작품이 등록되면 해당 순서의 대기 슬롯을 대체합니다.
+    // 공개 작품만 렌더링합니다. 비공개/미등록 행을 위한 빈 카드도 만들지 않습니다.
     function slots() {
-        const registered = works();
-        const placeholders = D.workSlots || [];
-        return Array.from({length: Math.max(40, registered.length, placeholders.length)}, (_, i) =>
-            registered[i] || placeholders[i] || {
-                id: `slot-${i + 1}`, title: `작품 등록 공간 ${String(i + 1).padStart(2, '0')}`,
-                category: '정식컨', image: 'assets/works-placeholder.svg',
-                description: '공개할 작품을 준비 중입니다.', sample: true
-            });
+        return works();
     }
     // --- 작품 카드 ---
     function workCard(w) {
@@ -1379,7 +1374,7 @@
           id="gallery-grid"
         ></div>
 
-        ${note('40개 등록 공간을 준비했습니다. 실제 공개 작품을 fallback-content.js에 등록하면 순서대로 표시됩니다.')}`);
+        `);
         // 작품 분류
         const cats = [
             '전체',
@@ -1413,7 +1408,7 @@
             document
                 .querySelector('#gallery-count')
                 .textContent =
-                `등록된 작품 ${works().length}개 / 준비된 공간 ${Math.max(40, works().length)}개`;
+                `공개 작품 ${works().length}개`;
             // 작품 카드
             document
                 .querySelector('#gallery-grid')

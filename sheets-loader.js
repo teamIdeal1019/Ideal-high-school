@@ -6,7 +6,7 @@
  */
 "use strict";
 window.IDEAL_CMS = (() => {
-  const CACHE_KEY = 'ideal-public-content-v4';
+  const CACHE_KEY = 'ideal-public-content-v5';
   const CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
   const ALLOWED_URL = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/;
   let sequence = 0;
@@ -139,8 +139,9 @@ window.IDEAL_CMS = (() => {
       url: url(row.url),
       description: text(row.description),
       alt: text(row.title),
-      published: true
-    })).filter(row => row.title && row.image);
+      // Apps Script에서 비공개 행을 제외하지만, 프런트에서도 한 번 더 차단합니다.
+      published: row.published !== false
+    })).filter(row => row.published && row.title && row.image);
 
     const events = uniqueRows(payload.events, (row, index) => ({
       id: text(row.id || `event-${index + 1}`).trim(),
