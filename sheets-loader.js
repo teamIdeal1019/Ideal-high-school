@@ -31,9 +31,10 @@ window.IDEAL_CMS = (() => {
     if (/^assets\/[A-Za-z0-9_./-]+$/.test(raw) && !raw.includes('..')) return raw;
     try {
       const u = new URL(raw);
-      if (u.hostname === 'drive.google.com') {
+      const isGoogleDrive = u.hostname === 'drive.google.com' || u.hostname === 'drive.usercontent.google.com';
+      if (isGoogleDrive) {
         const id = u.pathname.match(/^\/file\/d\/([A-Za-z0-9_-]+)(?:\/|$)/)?.[1] ||
-          (u.pathname === '/open' ? u.searchParams.get('id') : '');
+          u.searchParams.get('id') || '';
         if (id && /^[A-Za-z0-9_-]+$/.test(id))
           return `https://drive.google.com/thumbnail?id=${id}&sz=w1600`;
       }
