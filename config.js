@@ -10,7 +10,12 @@ window.IDEAL_CMS_CONFIG = {
   siteUrl: "https://ideal.sen.hs.io.kr/",
   // 새 CMS 스프레드시트를 Google Sheets로 올린 뒤 그 주소를 기록해 둘 수 있습니다.
   sheetUrl: "https://docs.google.com/spreadsheets/d/1LMJAuGOzNZPqzRtF6s7Z9v3YlOEdJTNly3Yt88hpDU0/edit?gid=1314616080#gid=1314616080",
-  requestTimeout: 12000
+  requestTimeout: 12000,
+
+  // 동아리활동 전용 CMS. 아래 Apps Script를 별도 스프레드시트에 배포한 뒤 /exec 주소를 입력하세요.
+  // 빈 값이면 현재 fallback-content.js의 부서 정보가 그대로 표시됩니다.
+  clubsApiUrl: "https://script.google.com/macros/s/AKfycbwytX2ejLWtoSavzj8foyU92jJsl7Nk6rOY-p7WztBTltv6UP_D_tiZMyAmwn0YibKlPQ/exec",
+  clubsSheetUrl: "https://docs.google.com/spreadsheets/d/1d8cvfmPSQci7Yef7lTEWqDiXHJjl9Y2DRDD-QGQ2nu4/edit?gid=1402537910#gid=1402537910"
 };
 
 /**

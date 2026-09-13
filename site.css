@@ -908,6 +908,7 @@ img {
   margin: 9px 0 0;
   color: #596472;
   font-size: 14px;
+  white-space: pre-line;
 }
 
 .notice-tools {

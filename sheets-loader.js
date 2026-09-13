@@ -7,6 +7,7 @@
 "use strict";
 window.IDEAL_CMS = (() => {
   const CACHE_KEY = 'ideal-public-content-v5';
+  const CLUBS_CACHE_KEY = 'ideal-clubs-content-v1';
   const CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
   const ALLOWED_URL = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/;
   let sequence = 0;
@@ -161,6 +162,32 @@ window.IDEAL_CMS = (() => {
     return {admission, site, posts, works, events, history};
   }
 
+  function normalizeClubs(payload) {
+    if (!payload || payload.ok !== true || !Array.isArray(payload.clubs)) {
+      throw new Error('동아리활동 응답 형식이 올바르지 않습니다.');
+    }
+
+    const clubs = payload.clubs.map((row, index) => {
+      const activities = Array.isArray(row.activities)
+        ? row.activities.map(v => text(v).trim()).filter(Boolean)
+        : text(row.activities).replace(/\r\n?/g, '\n').split(/\n|\s*\|\s*/).map(v => v.trim()).filter(Boolean);
+      return {
+        id: text(row.id || `club-${index + 1}`).trim(),
+        banner: assetUrl(row.banner),
+        name: text(row.name).trim(),
+        short: text(row.short).trim(),
+        description: text(row.description).trim(),
+        activities,
+        head: '부장 인사말',
+        greeting: text(row.greeting).trim(),
+        greetingDraft: false
+      };
+    }).filter(row => row.name);
+
+    if (!clubs.length) throw new Error('동아리활동 시트에 표시할 부서가 없습니다.');
+    return clubs;
+  }
+
   function apply(data) {
     const D = window.IDEAL_CONTENT;
     D.admission = {...D.admission, ...data.admission};
@@ -197,6 +224,35 @@ window.IDEAL_CMS = (() => {
     });
   }
 
+  function applyClubs(clubs) {
+    window.IDEAL_CONTENT.clubs = clubs;
+  }
+
+  async function loadClubs(config, notify) {
+    const endpoint = text(config.clubsApiUrl).trim();
+    if (!endpoint) return {mode: 'clubs-setup-required'};
+    if (!ALLOWED_URL.test(endpoint)) return {mode: 'clubs-invalid-url'};
+
+    const cacheKey = `${CLUBS_CACHE_KEY}:${endpoint}`;
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+      if (cached && Date.now() - cached.savedAt < CACHE_MAX_AGE) {
+        applyClubs(normalizeClubs(cached.payload));
+        notify('clubs-cache');
+      }
+    } catch {}
+
+    try {
+      const raw = await request(endpoint, Math.max(1000, Number(config.requestTimeout) || 12000));
+      applyClubs(normalizeClubs(raw));
+      try { localStorage.setItem(cacheKey, JSON.stringify({savedAt: Date.now(), payload: raw})); } catch {}
+      notify('clubs-remote');
+      return {mode: 'clubs-remote'};
+    } catch (error) {
+      return {mode: 'clubs-fallback', error};
+    }
+  }
+
   async function load(onUpdate) {
     const notify = mode => { if (typeof onUpdate === 'function') onUpdate(mode); };
     const D = window.IDEAL_CONTENT;
@@ -211,7 +267,8 @@ window.IDEAL_CMS = (() => {
     const endpoint = text(config.apiUrl).trim();
     if (!endpoint || !ALLOWED_URL.test(endpoint)) {
       notify('initial');
-      return {mode: endpoint ? 'invalid-url' : 'setup-required'};
+      const clubsResult = await loadClubs(config, notify);
+      return {mode: endpoint ? 'invalid-url' : 'setup-required', clubs: clubsResult};
     }
 
     const cacheKey = `${CACHE_KEY}:${endpoint}`;
@@ -229,12 +286,14 @@ window.IDEAL_CMS = (() => {
       apply(data);
       try { localStorage.setItem(cacheKey, JSON.stringify({savedAt: Date.now(), payload: raw})); } catch {}
       notify('remote');
-      return {mode: 'remote'};
+      const clubsResult = await loadClubs(config, notify);
+      return {mode: 'remote', clubs: clubsResult};
     } catch (error) {
       notify('fallback');
-      return {mode: 'fallback', error};
+      const clubsResult = await loadClubs(config, notify);
+      return {mode: 'fallback', error, clubs: clubsResult};
     }
   }
 
-  return {load, normalize, markdownBlocks, validDate};
+  return {load, normalize, normalizeClubs, markdownBlocks, validDate};
 })();
