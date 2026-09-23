@@ -6,8 +6,9 @@
  */
 "use strict";
 window.IDEAL_CMS = (() => {
-  const CACHE_KEY = 'ideal-public-content-v5';
+  const CACHE_KEY = 'ideal-public-content-v6';
   const CLUBS_CACHE_KEY = 'ideal-clubs-content-v1';
+  const RULES_CACHE_KEY = 'ideal-rules-content-v1';
   const CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
   const ALLOWED_URL = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/;
   let sequence = 0;
@@ -45,6 +46,49 @@ window.IDEAL_CMS = (() => {
     const n = Number(value);
     return value !== '' && value != null && Number.isFinite(n) ? n : fallback;
   };
+
+  // Google Sheets 체크박스/문자열을 공통 boolean으로 정규화합니다.
+  // 기존 Apps Script가 공개 값을 보내지 않는 경우에는 이전 호환성을 위해 true로 봅니다.
+  const publishedValue = row => {
+    const raw = row?.published ?? row?.public ?? row?.visibility ?? row?.['공개'];
+    if (raw === undefined || raw === null || raw === '') return true;
+    if (typeof raw === 'boolean') return raw;
+    if (typeof raw === 'number') return raw !== 0;
+    const value = text(raw).trim().toLowerCase();
+    if (['true','1','yes','y','on','공개','checked'].includes(value)) return true;
+    if (['false','0','no','n','off','비공개','unchecked'].includes(value)) return false;
+    return Boolean(raw);
+  };
+
+  // 공지 본문 셀에 Google Docs 공유 링크를 넣으면 문서를 사이트 안에 바로 표시합니다.
+  // 일반 텍스트/Markdown 본문도 이전과 동일하게 계속 지원합니다.
+  function googleDoc(value) {
+    const raw = text(value).trim();
+    if (!raw) return null;
+    try {
+      const u = new URL(raw);
+      if (u.protocol !== 'https:' || u.hostname !== 'docs.google.com') return null;
+
+      const normal = u.pathname.match(/^\/document\/d\/([A-Za-z0-9_-]+)/);
+      if (normal) {
+        const id = normal[1];
+        return {
+          url: `https://docs.google.com/document/d/${id}/edit`,
+          embedUrl: `https://docs.google.com/document/d/${id}/preview`
+        };
+      }
+
+      const published = u.pathname.match(/^\/document\/d\/e\/([A-Za-z0-9_-]+)\/pub/);
+      if (published) {
+        const id = published[1];
+        return {
+          url: `https://docs.google.com/document/d/e/${id}/pub`,
+          embedUrl: `https://docs.google.com/document/d/e/${id}/pub?embedded=true`
+        };
+      }
+    } catch {}
+    return null;
+  }
 
   // 공지 본문은 제한된 Markdown을 안전한 블록 데이터로 변환합니다.
   function markdownBlocks(source) {
@@ -120,16 +164,19 @@ window.IDEAL_CMS = (() => {
     const posts = uniqueRows(payload.posts, (row, index) => {
       const num = text(row.number).trim();
       const id = text(row.id || num || `notice-${index + 1}`).trim();
+      const doc = typeof row.body === 'string' ? googleDoc(row.body) : null;
       return {
         id,
         number: num,
         title: text(row.title),
         category: text(row.category) || '공지',
         date: validDate(row.date),
-        body: typeof row.body === 'string' ? markdownBlocks(row.body) : Array.isArray(row.body) ? row.body : [],
-        published: true
+        body: doc ? [] : (typeof row.body === 'string' ? markdownBlocks(row.body) : Array.isArray(row.body) ? row.body : []),
+        documentUrl: doc?.url || '',
+        documentEmbedUrl: doc?.embedUrl || '',
+        published: publishedValue(row)
       };
-    }).filter(row => row.title);
+    }).filter(row => row.published && row.title);
 
     const works = uniqueRows(payload.works, (row, index) => ({
       id: text(row.id || `work-${index + 1}`).trim(),
@@ -186,6 +233,43 @@ window.IDEAL_CMS = (() => {
 
     if (!clubs.length) throw new Error('동아리활동 시트에 표시할 부서가 없습니다.');
     return clubs;
+  }
+
+  function normalizeRules(payload) {
+    if (!payload || payload.ok !== true || !Array.isArray(payload.rules)) {
+      throw new Error('규칙 응답 형식이 올바르지 않습니다.');
+    }
+
+    const rulePolicy = {
+      notice: text(payload.rulePolicy?.notice),
+      source: text(payload.rulePolicy?.source),
+      openChat: text(payload.rulePolicy?.openChat)
+    };
+
+    const rules = payload.rules.map((group, groupIndex) => {
+      const rawId = text(group.id || `rule-group-${groupIndex + 1}`).trim();
+      const id = rawId.replace(/[^A-Za-z0-9_-]/g, '-') || `rule-group-${groupIndex + 1}`;
+      const items = (Array.isArray(group.items) ? group.items : []).map((rule, index) => ({
+        id: text(rule.id || `${id}-${index + 1}`),
+        title: text(rule.title).trim(),
+        text: text(rule.text).trim(),
+        penalty: text(rule.penalty).trim(),
+        details: (Array.isArray(rule.details) ? rule.details : []).map(v => text(v).trim()).filter(Boolean),
+        departments: (Array.isArray(rule.departments) ? rule.departments : []).map(dept => ({
+          name: text(dept?.name).trim(),
+          text: text(dept?.text).trim()
+        })).filter(dept => dept.name && dept.text)
+      })).filter(rule => rule.text);
+      return {
+        id,
+        title: text(group.title).trim(),
+        intro: text(group.intro).trim(),
+        items
+      };
+    }).filter(group => group.title && group.items.length);
+
+    if (!rules.length) throw new Error('이상위키에서 표시할 규칙을 찾지 못했습니다.');
+    return {rulePolicy, rules};
   }
 
   function apply(data) {
@@ -253,6 +337,37 @@ window.IDEAL_CMS = (() => {
     }
   }
 
+  function applyRules(data) {
+    const D = window.IDEAL_CONTENT;
+    D.rulePolicy = {...D.rulePolicy, ...data.rulePolicy};
+    D.rules = data.rules;
+  }
+
+  async function loadRules(config, notify) {
+    const endpoint = text(config.rulesApiUrl).trim();
+    if (!endpoint) return {mode: 'rules-setup-required'};
+    if (!ALLOWED_URL.test(endpoint)) return {mode: 'rules-invalid-url'};
+
+    const cacheKey = `${RULES_CACHE_KEY}:${endpoint}`;
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+      if (cached && cached.payload) {
+        applyRules(normalizeRules(cached.payload));
+        notify('rules-cache');
+      }
+    } catch {}
+
+    try {
+      const raw = await request(endpoint, Math.max(1000, Number(config.requestTimeout) || 12000));
+      applyRules(normalizeRules(raw));
+      try { localStorage.setItem(cacheKey, JSON.stringify({savedAt: Date.now(), payload: raw})); } catch {}
+      notify('rules-remote');
+      return {mode: 'rules-remote'};
+    } catch (error) {
+      return {mode: 'rules-fallback', error};
+    }
+  }
+
   async function load(onUpdate) {
     const notify = mode => { if (typeof onUpdate === 'function') onUpdate(mode); };
     const D = window.IDEAL_CONTENT;
@@ -265,35 +380,39 @@ window.IDEAL_CMS = (() => {
 
     const config = window.IDEAL_CMS_CONFIG || {};
     const endpoint = text(config.apiUrl).trim();
+    let mainResult;
+
     if (!endpoint || !ALLOWED_URL.test(endpoint)) {
       notify('initial');
-      const clubsResult = await loadClubs(config, notify);
-      return {mode: endpoint ? 'invalid-url' : 'setup-required', clubs: clubsResult};
-    }
+      mainResult = {mode: endpoint ? 'invalid-url' : 'setup-required'};
+    } else {
+      const cacheKey = `${CACHE_KEY}:${endpoint}`;
+      try {
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+        if (cached && Date.now() - cached.savedAt < CACHE_MAX_AGE) {
+          apply(normalize(cached.payload));
+          notify('cache');
+        }
+      } catch {}
 
-    const cacheKey = `${CACHE_KEY}:${endpoint}`;
-    try {
-      const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
-      if (cached && Date.now() - cached.savedAt < CACHE_MAX_AGE) {
-        apply(normalize(cached.payload));
-        notify('cache');
+      try {
+        const raw = await request(endpoint, Math.max(1000, Number(config.requestTimeout) || 12000));
+        apply(normalize(raw));
+        try { localStorage.setItem(cacheKey, JSON.stringify({savedAt: Date.now(), payload: raw})); } catch {}
+        notify('remote');
+        mainResult = {mode: 'remote'};
+      } catch (error) {
+        notify('fallback');
+        mainResult = {mode: 'fallback', error};
       }
-    } catch {}
-
-    try {
-      const raw = await request(endpoint, Math.max(1000, Number(config.requestTimeout) || 12000));
-      const data = normalize(raw);
-      apply(data);
-      try { localStorage.setItem(cacheKey, JSON.stringify({savedAt: Date.now(), payload: raw})); } catch {}
-      notify('remote');
-      const clubsResult = await loadClubs(config, notify);
-      return {mode: 'remote', clubs: clubsResult};
-    } catch (error) {
-      notify('fallback');
-      const clubsResult = await loadClubs(config, notify);
-      return {mode: 'fallback', error, clubs: clubsResult};
     }
+
+    const [clubsResult, rulesResult] = await Promise.all([
+      loadClubs(config, notify),
+      loadRules(config, notify)
+    ]);
+    return {...mainResult, clubs: clubsResult, rules: rulesResult};
   }
 
-  return {load, normalize, normalizeClubs, markdownBlocks, validDate};
+  return {load, normalize, normalizeClubs, normalizeRules, markdownBlocks, validDate};
 })();

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="theme-color" content="#14243a"/>
+<meta name="description" content="팀 이상에서 사용하는 디스코드 채널과 구글 드라이브 구조를 안내합니다."/>
+<title>시설안내 | 이상고등학교</title>
+<link rel="canonical" href="https://ideal.sen.hs.io.kr/facilities.html"/>
+<link rel="icon" sizes="any" type="image/x-icon" href="./favicon.ico?v=94d53b0c2378"/>
+<link rel="icon" sizes="16x16" type="image/png" href="./favicon-16.png?v=94d53b0c2378"/>
+<link rel="icon" sizes="32x32" type="image/png" href="./favicon-32.png?v=94d53b0c2378"/>
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=94d53b0c2378"/>
+<meta property="og:locale" content="ko_KR"/>
+<meta property="og:site_name" content="이상고등학교"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="시설안내 | 이상고등학교"/>
+<meta property="og:description" content="팀 이상에서 사용하는 디스코드 채널과 구글 드라이브 구조를 안내합니다."/>
+<meta property="og:url" content="https://ideal.sen.hs.io.kr/facilities.html"/>
+<meta property="og:image" content="https://ideal.sen.hs.io.kr/assets/main-illustration.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="stylesheet" href="./site.css?v=20260923-clubspacing3"/>
+<link rel="stylesheet" href="./facilities.css?v=20260923-uxui2"/>
+<script defer src="./fallback-content.js?v=20260923-rulesync1"></script>
+<script defer src="./config.js?v=20260923-rulesync1"></script>
+<script defer src="./sheets-loader.js?v=20260923-rulesync1"></script>
+<script defer src="./site.js?v=20260923-rulesync1"></script>
+<script defer src="./facilities.js?v=20260918-facilities1"></script>
+</head>
+<body data-page="facilities" id="top">
+<a class="skip" href="#main">본문 바로가기</a>
+<div id="site-header"></div>
+
+<main id="main">
+  <section class="page-hero">
+    <div class="container">
+      <h1>시설안내</h1>
+      <p>팀 이상에서 사용하는 디스코드 채널과 구글 드라이브 구조를 한곳에서 확인해보세요. 각 공간과 자료가 어디에 있고 어떻게 사용되는지 안내합니다.</p>
+    </div>
+  </section>
+
+  <section class="section facilities-section">
+    <div class="container facility-guide">
+      <div class="facility-toolbar">
+        <div>
+          <h2>디스코드</h2>
+          <p>카테고리를 선택하면 해당 공간의 채널과 용도를 확인할 수 있습니다.</p>
+        </div>
+        <label class="facility-search"><input id="discordSearchInput" type="search" placeholder="채널 검색" aria-label="디스코드 시설 및 채널 검색"></label>
+      </div>
+
+      <section id="discordSearchResults" class="facility-search-results" aria-live="polite">
+        <div class="facility-section-label">디스코드 검색 결과</div>
+        <div id="discordResultsGrid" class="facility-results-grid"></div>
+      </section>
+
+      <div class="facility-layout" id="facilityLayout">
+        <aside class="facility-directory" id="directory">
+          <div class="facility-directory-head"><b>이상고 시설 목록</b><span>총 10개 구역</span></div>
+        </aside>
+
+        <section class="facility-panel" id="panel">
+          <div class="facility-panel-top">
+            <div class="facility-crumb">시설안내 / 디스코드 채널</div>
+            <div class="facility-panel-title">
+              <div class="facility-big-ico" id="panelIcon">✨</div>
+              <div><h3 id="panelTitle">교문</h3><p id="panelDesc"></p></div>
+            </div>
+          </div>
+          <div class="facility-panel-body">
+            <div class="facility-section-label">채널 목록</div>
+            <div class="channel-grid" id="channelGrid"></div>
+            <div class="facility-note"><span class="dot"></span><div><b>안내</b><br>처음 서버에 들어왔다면 교문에서 역할을 먼저 받아주세요. 역할에 따라 보이는 채널이 달라질 수 있습니다.</div></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="resource-section" id="resourceCenter">
+        <div class="facility-toolbar">
+          <div>
+            <h2>구글 드라이브</h2>
+            <p>팀 활동에 필요한 파일이 어디에 정리되어 있는지, 폴더와 문서의 실제 구조를 따라 확인해보세요.</p>
+          </div>
+          <label class="facility-search"><input id="driveSearchInput" type="search" placeholder="폴더, 파일 검색" aria-label="구글 드라이브 폴더 및 문서 검색"></label>
+        </div>
+
+        <section id="driveSearchResults" class="facility-search-results" aria-live="polite">
+          <div class="facility-section-label">드라이브 검색 결과</div>
+          <div id="driveResultsGrid" class="facility-results-grid"></div>
+        </section>
+
+        <div class="facility-layout" id="driveLayout">
+          <aside class="facility-directory" id="driveDirectory">
+            <div class="facility-directory-head"><b>Google Drive 목록</b><span>공유 폴더 최상위 7개 항목</span></div>
+          </aside>
+
+          <section class="facility-panel" id="drivePanel">
+            <div class="facility-panel-top">
+              <div class="facility-crumb">시설안내 / 구글 드라이브</div>
+              <div class="facility-panel-title">
+                <div class="facility-big-ico" id="driveIcon">📊</div>
+                <div><h3 id="driveTitle">출석부</h3><p id="driveDesc"></p></div>
+              </div>
+            </div>
+            <div class="facility-panel-body">
+              <div id="driveContent" class="drive-content"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <noscript><nav aria-label="사이트 메뉴"><a href="index.html">홈</a> · <a href="about.html">학교소개</a> · <a href="calendar.html">학사일정</a> · <a href="life.html">학교생활</a> · <a href="clubs.html">동아리활동</a> · <a href="index.html#notices">공지사항</a> · <a href="facilities.html">시설안내</a> · <a href="gallery.html">이상광장</a></nav></noscript>
+</main>
+
+<div id="site-footer"></div>
+<div aria-live="polite" class="sr-only" id="content-status" role="status"></div>
+</body>
+</html>
