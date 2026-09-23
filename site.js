@@ -2,7 +2,7 @@
  * 이상고등학교 · 화면과 동작
  *
  * 이 파일은 fallback-content.js의 자료를 HTML로 변환하고 메뉴, 달력, 갤러리를 작동시킵니다.
- * 일반적인 문구·공지·일정·규칙 수정은 fallback-content.js에서 하세요.
+ * 공지·일정은 CMS에서, 규칙 원문은 이상위키 Google Docs에서 동기화합니다.
  * 화면 구조를 바꿀 때만 이 파일을 수정하고, 디자인은 site.css에서 관리합니다.
  * 외부 라이브러리나 별도 서버 없이 실행되는 정적 홈페이지입니다.
  */
@@ -97,7 +97,8 @@
         ['학사일정', 'calendar.html', 'calendar'],
         ['학교생활', 'life.html', 'life'],
         ['동아리활동', 'clubs.html', 'clubs'],
-        ['공지사항', 'index.html#notices', 'notices']
+        ['공지사항', 'index.html#notices', 'notices'],
+        ['시설안내', 'facilities.html', 'facilities']
     ];
     // 학교 로고
     // 헤더와 푸터는 서로 다른 파일 에셋을 사용합니다.
@@ -677,18 +678,10 @@
         update();
     }
     // --- 홈 · 공지사항 게시판 ---
-    // 게시글이 세 개여도 다섯 줄을 유지합니다. 나머지는 내용과 링크가 없는 빈 줄입니다.
-    // 글이 다섯 개보다 많아지면 모두 표시하며, 기존 날짜·분류·본문 데이터는 그대로 사용합니다.
+    // 실제로 작성·공개된 공지만 표시합니다. 빈 행을 채워 고정 개수를 유지하지 않습니다.
     function homeNotices() {
         const posts = allPosts();
-        const rows = Array.from({length: Math.max(5, posts.length)}, (_, i) => {
-            const p = posts[i];
-            if (!p) return `<tr class="home-board-row is-empty" aria-label="빈 공지 공간">
-                <td class="home-board-number"></td>
-                <td class="home-board-category"></td>
-                <th scope="row" class="home-board-title"></th>
-                <td class="home-board-date"></td>
-            </tr>`;
+        const rows = posts.map((p, i) => {
             const dateLabel = /^\d{4}-\d{2}-\d{2}$/.test(p.date || '')
                 ? `<time datetime="${E(p.date)}">${E(date(p.date))}</time>` : '';
             const category = p.category || '공지';
@@ -920,16 +913,8 @@
                     </ul>
 
                     <div class="club-greeting">
-
-                      <strong>
-                        ${E(c.head || '부장 인사말')}
-                      </strong>
-
-                      <blockquote>
-                        ${E(c.greeting ||
-                        '부장님의 인사말을 준비 중입니다.')}
-                      </blockquote>
-
+                      <strong>${E(c.head || '부장 인사말')}</strong>
+                      <blockquote>${E(c.greeting || '부장님의 인사말을 준비 중입니다.')}</blockquote>
                     </div>
 
                   </article>`)
@@ -985,7 +970,6 @@
       <ol class="rule-list">
         ${group.items.map(renderRuleItem).join('')}
       </ol>
-      ${group.note ? `<p class="rule-section-note">${E(group.note)}</p>` : ''}
     </article>`;
     }
     function life() {
@@ -1026,6 +1010,13 @@
       </div>
     `, 'life-section');
     }
+    // --- 시설안내 ---
+    // 시설안내 본문은 facilities.html에 정적으로 두고 facilities.js가 상호작용을 담당합니다.
+    // 공통 헤더·푸터와 활성 메뉴 상태만 이 파일에서 공유합니다.
+    function facilities() {
+        // 정적 본문을 그대로 유지합니다.
+    }
+
     // --- 학사일정 데이터 ---
     // 구글 시트의 `학사일정` 탭은 기존처럼 `날짜` + `일정명` 두 열만 사용합니다.
     // 화면에서는 선택한 달을 달력에 표시하고, 같은 반기(1~6월 / 7~12월)의
@@ -1238,7 +1229,7 @@
                 result += `<strong>${E(match[3])}</strong>`;
             } else {
                 const target = match[2];
-                const isLocal = /^(?:index|about|calendar|life|clubs|gallery|post)\.html(?:[?#][^\s]*)?$/.test(target);
+                const isLocal = /^(?:index|about|calendar|life|clubs|facilities|gallery|post)\.html(?:[?#][^\s]*)?$/.test(target);
                 const link = isLocal ? target : safeUrl(target);
                 result += link ? a(link,E(match[1]),'post-inline-link',!isLocal) : E(match[0]);
             }
@@ -1270,7 +1261,7 @@
             </table></div>`;
             case 'links': return `<div class="post-links">${(block.items || []).map(item=>{
                 const target=String(item.url || '');
-                const local=/^(?:index|about|calendar|life|clubs|gallery|post)\.html(?:[?#][^\s]*)?$/.test(target);
+                const local=/^(?:index|about|calendar|life|clubs|facilities|gallery|post)\.html(?:[?#][^\s]*)?$/.test(target);
                 const url=local?target:safeUrl(target);
                 return url?a(url,`<strong>${E(item.label)} <span aria-hidden="true">↗</span></strong>${item.description?`<small>${E(item.description)}</small>`:''}`,'post-link',!local):'';
             }).join('')}</div>`;
@@ -1299,7 +1290,7 @@
         }
 
         document.title = `${p.title} | 이상고등학교`;
-        const description = p.excerpt || p.body?.find(b => b.type === 'p')?.text || p.title;
+        const description = p.excerpt || (!p.documentUrl ? p.body?.find(b => b.type === 'p')?.text : '') || p.title;
         const setMeta = (selector, value) => {
             const node = document.querySelector(selector);
             if (node) node.setAttribute('content', String(value));
@@ -1335,7 +1326,19 @@
                 ${!p.published ? note('이 글은 편집 초안이며 실제 운영 공지가 아닙니다. 공개 전 운영자가 내용을 확인해야 합니다.') : ''}
 
                 <div class="post-body">
-                    ${(p.body || []).map(renderPostBlock).join('')}
+                    ${p.documentEmbedUrl ? `<div class="post-google-doc">
+                        <div class="post-google-doc-head">
+                            <span>Google 문서에서 작성된 공지입니다.</span>
+                            ${p.documentUrl ? a(p.documentUrl, '원본 문서 열기 ↗', 'post-google-doc-link', true) : ''}
+                        </div>
+                        <iframe
+                            class="post-google-doc-frame"
+                            src="${E(p.documentEmbedUrl)}"
+                            title="${E(p.title)} 본문"
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                        ></iframe>
+                    </div>` : (p.body || []).map(renderPostBlock).join('')}
 
                     ${isCurrentRecruitment ? `<div class="post-info">
                         <strong>모집 상태 · ${E(s.label)}</strong>
@@ -1440,6 +1443,7 @@
         calendar,
         life,
         clubs,
+        facilities,
         post,
         gallery
     };

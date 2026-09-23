@@ -5641,3 +5641,464 @@ body[data-page="about"] .leader-card {
     padding: 10px;
   }
 }
+
+
+/* ============================================================
+   시설안내 추가 · 6개 메인 카테고리 / 헤더 메뉴 보정
+   ============================================================ */
+.site-header.site-chrome .nav {
+  gap: clamp(18px, 2vw, 30px);
+}
+
+body[data-page="home"] .category-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+@media (max-width: 1000px) {
+  body[data-page="home"] .category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  body[data-page="home"] .category-card:nth-child(3n) {
+    border-right: 0;
+  }
+  body[data-page="home"] .category-card:nth-child(-n+3) {
+    border-bottom: 1px solid var(--line);
+  }
+  body[data-page="home"] .category-card:nth-child(n+4) {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 780px) {
+  body[data-page="home"] .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body[data-page="home"] .category-card {
+    grid-column: auto;
+    border-bottom: 1px solid var(--line) !important;
+  }
+  body[data-page="home"] .category-card:nth-child(even) {
+    border-right: 0;
+  }
+  body[data-page="home"] .category-card:nth-child(n+5) {
+    border-bottom: 0 !important;
+  }
+  body[data-page="home"] .category-card:last-child {
+    grid-column: auto;
+  }
+}
+
+/* ============================================================
+   UX/UI 표준치 정리 · 2026-09-22
+   ------------------------------------------------------------
+   PC/모바일 가독성, 클릭·터치 영역, 버튼 높이와 radius를
+   일반적인 웹 UI 범위에 맞춰 통일합니다.
+   콘텐츠·색상·CMS·인터랙션 로직은 변경하지 않습니다.
+   ============================================================ */
+
+/* Desktop baseline */
+:root {
+  --radius: 20px;
+  --type-section: clamp(30px, 2.6vw, 36px);
+}
+
+html {
+  scroll-padding-top: 84px;
+}
+
+.header-row {
+  height: 80px;
+}
+
+/* Homepage primary CTA: 48px control / 16px label */
+.hero-actions .button {
+  min-height: 48px;
+  padding: 11px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Recruitment banner: bring large radius into the 24px range. */
+.admission-banner {
+  border-radius: 24px;
+}
+
+/* Work carousel controls */
+.circle-button {
+  width: 44px;
+  height: 44px;
+}
+
+/* Plaza CTA */
+.plaza .plaza-all {
+  min-height: 48px;
+  padding: 11px 24px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* Club popup: desktop click target and action controls */
+.club-popup-x {
+  width: 40px;
+  height: 40px;
+}
+
+.club-popup-actions button {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+@media (max-width: 880px) {
+  html {
+    scroll-padding-top: 68px;
+  }
+
+  .header-row {
+    height: 64px;
+  }
+
+  /* Preserve the existing mobile section-title scale. */
+  :root {
+    --type-section: clamp(27px, 7.5vw, 32px);
+  }
+}
+
+@media (max-width: 780px) {
+  /* Mobile navigation */
+  .menu-button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .nav {
+    top: 64px;
+  }
+
+  /* Calendar and filter controls: 44px minimum touch target. */
+  .cal-nav button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .filter-button {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+
+  /* Footer navigation / social targets */
+  .footer.site-chrome .footer-nav a {
+    min-height: 44px;
+  }
+
+  .footer.site-chrome .footer-social-link {
+    min-height: 44px;
+  }
+
+  /* Club popup mobile targets */
+  .club-popup-x {
+    width: 44px;
+    height: 44px;
+  }
+
+  .club-popup-actions button {
+    min-height: 44px;
+    font-size: 14px;
+  }
+}
+
+
+
+/* 2026-09-23 · 781~880px 헤더/모바일 메뉴 위치 보정 */
+@media (max-width: 880px) {
+  .site-header .nav {
+    top: 64px;
+  }
+}
+
+
+/* ============================================================
+   2026-09-23 · 동아리활동 간격 정리 / Google Docs 공지 본문
+   ============================================================ */
+
+/* 동아리활동: 카드 안의 정보 단계가 균등하게 이어지도록 여백을 재정리합니다. */
+body[data-page="clubs"] .section-head {
+  margin-bottom: 28px;
+}
+body[data-page="clubs"] .club-grid {
+  gap: 24px;
+}
+body[data-page="clubs"] .club-card {
+  padding: 28px;
+}
+body[data-page="clubs"] .club-banner {
+  margin-bottom: 19px;
+}
+body[data-page="clubs"] .club-no {
+  display: block;
+  margin-bottom: 6px;
+}
+body[data-page="clubs"] .club-card h2 {
+  margin: 0 0 5px;
+}
+body[data-page="clubs"] .club-short {
+  margin: 0 0 12px;
+}
+body[data-page="clubs"] .club-desc {
+  margin: 0;
+}
+body[data-page="clubs"] .activity-list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+}
+body[data-page="clubs"] .activity-list li {
+  margin: 0;
+}
+body[data-page="clubs"] .activity-list li + li {
+  margin-top: 4px;
+}
+body[data-page="clubs"] .club-greeting {
+  margin-top: 17px;
+  padding-top: 17px;
+}
+body[data-page="clubs"] .club-greeting strong {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+}
+body[data-page="clubs"] .club-greeting blockquote {
+  margin: 6px 0 0;
+  line-height: 1.72;
+}
+
+/* 공지 CMS의 본문 셀에 Google Docs 공유 링크를 넣었을 때 사용하는 문서 뷰어입니다. */
+.post-google-doc {
+  margin: 0 0 30px;
+}
+.post-google-doc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  color: var(--gray-500);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.post-google-doc-link {
+  flex: 0 0 auto;
+  color: var(--navy-700);
+  font-weight: 700;
+  text-decoration: none;
+}
+.post-google-doc-link:hover {
+  color: var(--navy-900);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.post-google-doc-frame {
+  display: block;
+  width: 100%;
+  min-height: 920px;
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  background: #fff;
+}
+
+@media (max-width: 780px) {
+  body[data-page="clubs"] .section-head {
+    margin-bottom: 24px;
+  }
+  body[data-page="clubs"] .club-grid {
+    gap: 18px;
+  }
+  body[data-page="clubs"] .club-card {
+    padding: 22px;
+  }
+  body[data-page="clubs"] .club-banner {
+    margin-bottom: 16px;
+  }
+  body[data-page="clubs"] .club-greeting {
+    margin-top: 15px;
+    padding-top: 15px;
+  }
+  .post-google-doc-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .post-google-doc-frame {
+    min-height: 740px;
+    border-radius: 9px;
+  }
+}
+
+
+/* ============================================================
+   2026-09-23 · 동아리활동 세로 리듬 2차 정리
+   - 같은 정보 단위는 촘촘하게, 다른 블록 사이는 명확하게
+   - 부장 인사말 제목과 본문 간 과도한 공백 제거
+   ============================================================ */
+body[data-page="clubs"] .section-head {
+  margin-bottom: 24px !important;
+}
+body[data-page="clubs"] .club-grid {
+  gap: 22px !important;
+}
+body[data-page="clubs"] .club-card {
+  padding: 26px 28px 28px !important;
+}
+body[data-page="clubs"] .club-banner {
+  margin: 0 0 18px !important;
+}
+body[data-page="clubs"] .club-no {
+  display: block;
+  margin: 0 0 4px !important;
+}
+body[data-page="clubs"] .club-card h2 {
+  margin: 0 0 3px !important;
+}
+body[data-page="clubs"] .club-short {
+  margin: 0 0 8px !important;
+}
+body[data-page="clubs"] .club-desc {
+  margin: 0 !important;
+}
+body[data-page="clubs"] .activity-list {
+  margin: 12px 0 0 !important;
+  padding-left: 20px;
+}
+body[data-page="clubs"] .activity-list li {
+  margin: 0 !important;
+}
+body[data-page="clubs"] .activity-list li + li {
+  margin-top: 3px !important;
+}
+body[data-page="clubs"] .club-greeting {
+  margin: 14px 0 0 !important;
+  padding: 14px 0 0 !important;
+  border-top: 1px solid var(--gray-200);
+}
+body[data-page="clubs"] .club-greeting strong {
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body[data-page="clubs"] .club-greeting blockquote {
+  display: block;
+  margin: 8px 0 0 !important;
+  padding: 0 !important;
+  line-height: 1.62 !important;
+  white-space: pre-line;
+}
+
+@media (max-width: 780px) {
+  body[data-page="clubs"] .section-head {
+    margin-bottom: 21px !important;
+  }
+  body[data-page="clubs"] .club-grid {
+    gap: 17px !important;
+  }
+  body[data-page="clubs"] .club-card {
+    padding: 20px 20px 22px !important;
+  }
+  body[data-page="clubs"] .club-banner {
+    margin-bottom: 15px !important;
+  }
+  body[data-page="clubs"] .activity-list {
+    margin-top: 10px !important;
+  }
+  body[data-page="clubs"] .club-greeting {
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+  }
+  body[data-page="clubs"] .club-greeting blockquote {
+    margin-top: 7px !important;
+  }
+}
+
+
+/* ============================================================
+   2026-09-23 · 동아리활동 세로 리듬 3차 정리
+   - CMS 줄바꿈만 보존하고 템플릿 자체 공백은 제거
+   - 카드 내부 line-height와 블록 간격을 함께 재조정
+   ============================================================ */
+body[data-page="clubs"] .club-card {
+  padding: 27px 28px 29px !important;
+}
+body[data-page="clubs"] .club-banner {
+  margin: 0 0 17px !important;
+}
+body[data-page="clubs"] .club-no {
+  margin: 0 0 3px !important;
+}
+body[data-page="clubs"] .club-card h2 {
+  margin: 0 0 4px !important;
+}
+body[data-page="clubs"] .club-short {
+  margin: 0 0 10px !important;
+  line-height: 1.45 !important;
+}
+body[data-page="clubs"] .club-desc {
+  margin: 0 !important;
+  line-height: 1.58 !important;
+}
+body[data-page="clubs"] .activity-list {
+  margin: 14px 0 0 !important;
+  padding-left: 20px !important;
+  line-height: 1.55 !important;
+}
+body[data-page="clubs"] .activity-list li {
+  margin: 0 !important;
+  line-height: 1.55 !important;
+}
+body[data-page="clubs"] .activity-list li + li {
+  margin-top: 5px !important;
+}
+body[data-page="clubs"] .club-greeting {
+  margin: 20px 0 0 !important;
+  padding: 16px 0 0 !important;
+}
+body[data-page="clubs"] .club-greeting strong {
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.4 !important;
+}
+body[data-page="clubs"] .club-greeting blockquote {
+  display: block;
+  margin: 10px 0 0 !important;
+  padding: 0 !important;
+  line-height: 1.58 !important;
+  white-space: pre-line;
+}
+
+@media (max-width: 780px) {
+  body[data-page="clubs"] .club-card {
+    padding: 20px 20px 23px !important;
+  }
+  body[data-page="clubs"] .club-banner {
+    margin-bottom: 14px !important;
+  }
+  body[data-page="clubs"] .club-short {
+    margin-bottom: 9px !important;
+  }
+  body[data-page="clubs"] .activity-list {
+    margin-top: 12px !important;
+  }
+  body[data-page="clubs"] .club-greeting {
+    margin-top: 17px !important;
+    padding-top: 14px !important;
+  }
+  body[data-page="clubs"] .club-greeting blockquote {
+    margin-top: 8px !important;
+  }
+}

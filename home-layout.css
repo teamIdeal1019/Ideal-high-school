@@ -454,3 +454,17 @@ body[data-page="home"] .home-intro-screen .hero-wings {
     font-size: 14px;
   }
 }
+
+/* ============================================================
+   UX/UI 표준치 정리 · 홈 전용 높이 동기화 · 2026-09-22
+   ============================================================ */
+body[data-page="home"] {
+  --home-header-height: 80px;
+}
+
+@media (max-width: 880px) {
+  body[data-page="home"] {
+    --home-header-height: 64px;
+  }
+}
+

@@ -12,6 +12,11 @@ window.IDEAL_CMS_CONFIG = {
   sheetUrl: "https://docs.google.com/spreadsheets/d/1LMJAuGOzNZPqzRtF6s7Z9v3YlOEdJTNly3Yt88hpDU0/edit?gid=1314616080#gid=1314616080",
   requestTimeout: 12000,
 
+  // 규칙 원문 전용 Apps Script 웹앱. 이상위키 Google Docs의 `3. 규칙`을 읽어
+  // 웹사이트용 데이터만 반환합니다. 규칙 추가/삭제/수정은 원본 문서에서 자동 반영됩니다.
+  rulesApiUrl: "https://script.google.com/macros/s/AKfycbwaGxsF1XGFbe9CCWXRbw9fFdjwqP0lSJTXf55Ab4slpuV_yRM3sYOT6RfC2G69wk_iSg/exec",
+  rulesWikiDocumentUrl: "https://docs.google.com/document/d/1MtoMEaBiY6oxagLoxrlVnCw6KFrMoA4ul-Q90Z6bxdQ/edit",
+
   // 동아리활동 전용 CMS. 아래 Apps Script를 별도 스프레드시트에 배포한 뒤 /exec 주소를 입력하세요.
   // 빈 값이면 현재 fallback-content.js의 부서 정보가 그대로 표시됩니다.
   clubsApiUrl: "https://script.google.com/macros/s/AKfycbwytX2ejLWtoSavzj8foyU92jJsl7Nk6rOY-p7WztBTltv6UP_D_tiZMyAmwn0YibKlPQ/exec",
